@@ -5,7 +5,7 @@
   "license": "MIT",
   "private": true,
   "workspaces": [
-    "patterns/*"
+    "packages/*"
   ],
   "devDependencies": {
     "prettier": "^2.3.0"
