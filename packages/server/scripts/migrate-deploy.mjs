@@ -13,6 +13,6 @@ const data = await client.send(command);
 const { engine, username, password, host, port } = JSON.parse(
   data.SecretString
 );
-process.env.DATABASE_URL = `${engine}://${username}:${password}@${host}:${port}/tadb`;
+process.env.DATABASE_URL = `${engine}://${username}:${password}@${host}:${port}/tadb?schema=public`;
 
 await $`yarn prisma migrate deploy`;

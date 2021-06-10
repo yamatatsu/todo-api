@@ -46,6 +46,32 @@ cd packages/cdk
 yarn cdk deploy --all
 ```
 
+## db migration
+
+マネジメントコンソールを使って、AWS system manager session manager で Bastion サーバーに入る。
+
+```sh
+cd ~/
+
+sudo yum update -y
+sudo yum install git -y
+
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+. ~/.nvm/nvm.sh
+nvm install node
+npm i -g yarn
+
+git clone https://github.com/yamatatsu/todo-api.git
+cd todo-api/
+
+yarn
+
+cd packages/server
+echo 'DATABASE_URL="${ AuroraのURL }"' > .env
+
+yarn prisma migrate deploy
+```
+
 ## load map
 
 1. architecture overview

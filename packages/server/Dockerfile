@@ -3,8 +3,10 @@
 # FROM node:16-alpine@sha256:f5079a4f93c8e4fd07ffa93fc95f6484d7f4f40abd126c11810cb282483ab599
 FROM node:16-alpine
 
-ADD prisma .
-ADD scripts .
+WORKDIR /home/node/
+
+ADD prisma prisma
+ADD scripts scripts
 ADD package.json .
 
 RUN yarn
