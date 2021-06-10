@@ -4,6 +4,7 @@ import { CognitoStack } from "./Cognito";
 import { VpcStack } from "./Vpc";
 import { DatabaseStack } from "./Database";
 import { ApiServerStack } from "./ApiServer";
+import { MigraterStack } from "./Migrater";
 import { BastionStack } from "./Bastion";
 import { AccountId, assertEnvName } from "./config";
 
@@ -31,6 +32,13 @@ new ApiServerStack(app, `${envName}-TodoApi-ApiServer`, {
   securityGroup: dbAccessSG,
   dbCredentialSecret: database.dbCredentialSecret,
   userPoolArn: cognito.userPoolArn,
+  env,
+});
+new MigraterStack(app, `${envName}-TodoApi-Migrater`, {
+  dockerfilePath: path.resolve(__dirname, "../../server"),
+  vpc,
+  securityGroup: dbAccessSG,
+  dbCredentialSecret: database.dbCredentialSecret,
   env,
 });
 new BastionStack(app, `${envName}-TodoApi-Bastion`, {
