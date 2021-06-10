@@ -2,28 +2,55 @@ import {
   App,
   Stack,
   StackProps,
-  aws_ec2 as ec2,
-  aws_lambda as lambda,
-  aws_lambda_nodejs as lambda_nodejs,
+  aws_ec2,
+  aws_lambda,
+  aws_lambda_nodejs,
+  aws_apigateway,
+  aws_secretsmanager,
+  Duration,
 } from "aws-cdk-lib";
 
 type Props = StackProps & {
   codeEntry: string;
-  vpc: ec2.IVpc;
-  dbCredentialSecretName: string;
-  dbHost: string;
-  dbPort: string;
+  vpc: aws_ec2.IVpc;
+  securityGroup: aws_ec2.ISecurityGroup;
+  dbCredentialSecret: aws_secretsmanager.ISecret;
+  userPoolArn: string;
 };
 
 export class ApiServerStack extends Stack {
   constructor(parent: App, id: string, props: Props) {
     super(parent, id, props);
 
-    new lambda_nodejs.NodejsFunction(this, "Lambda", {
+    // TODO: lambda insight入れる
+    const handler = new aws_lambda_nodejs.NodejsFunction(this, "Lambda", {
       entry: props.codeEntry,
-      runtime: lambda.Runtime.NODEJS_14_X,
+      runtime: aws_lambda.Runtime.NODEJS_14_X,
+      // TODO: aurora serverless やめて rds proxyつけたら10秒に戻す
+      timeout: Duration.seconds(20),
       vpc: props.vpc,
+      securityGroups: [props.securityGroup],
       bundling: {
+        /**
+         * esbuildの成果物にprismaのengineが含める必要がある
+         * Respect for https://dev.to/prisma/bundling-prisma-with-the-cdk-using-aws-lambda-nodejs-2lkd
+         */
+        nodeModules: ["@prisma/client", "prisma"],
+        commandHooks: {
+          beforeBundling(inputDir: string, outputDir: string): string[] {
+            return [];
+          },
+          beforeInstall(inputDir: string, outputDir: string) {
+            return [`cp -R ../prisma ${outputDir}/`];
+          },
+          afterBundling(inputDir: string, outputDir: string): string[] {
+            return [
+              `cd ${outputDir}`,
+              `yarn prisma generate`,
+              `rm -rf node_modules/@prisma/engines`,
+            ];
+          },
+        },
         /**
          * forceDockerBundling: これは default false であるが、下記理由により明示的に示す。
          * これが true のとき、もしくは esbuild が見つからないとき(下記URL参照)に、
@@ -36,10 +63,33 @@ export class ApiServerStack extends Stack {
         forceDockerBundling: false,
       },
       environment: {
-        SECRET_NAME: props.dbCredentialSecretName,
-        DB_HOST: props.dbHost,
-        DB_PORT: props.dbPort,
+        NODE_ENV: "production",
+        SECRET_NAME: props.dbCredentialSecret.secretName,
       },
+    });
+
+    props.dbCredentialSecret.grantRead(handler);
+
+    // const authorizer = new aws_apigateway.CognitoUserPoolsAuthorizer(
+    //   this,
+    //   "Authorizer",
+    //   {
+    //     cognitoUserPools: [],
+    //     identitySource: "method.request.header.x-mpftoken",
+    //   }
+    // );
+
+    const restApi = new aws_apigateway.LambdaRestApi(this, "LambdaRestApi", {
+      handler,
+      deployOptions: {
+        metricsEnabled: true,
+        loggingLevel: aws_apigateway.MethodLoggingLevel.INFO,
+        dataTraceEnabled: true,
+        tracingEnabled: true,
+      },
+      // defaultMethodOptions: {
+      //   authorizer,
+      // },
     });
   }
 }

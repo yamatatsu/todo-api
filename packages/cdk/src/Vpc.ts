@@ -1,34 +1,55 @@
-import { App, Stack, StackProps, aws_ec2 as ec2 } from "aws-cdk-lib";
+import { App, Stack, StackProps, aws_ec2 } from "aws-cdk-lib";
 
 export class VpcStack extends Stack {
-  public readonly vpc: ec2.IVpc;
+  public readonly vpc: aws_ec2.IVpc;
+  public readonly dbAccessSG: aws_ec2.ISecurityGroup;
+  public readonly dbSG: aws_ec2.ISecurityGroup;
 
   constructor(parent: App, id: string, props?: StackProps) {
     super(parent, id, props);
 
-    const vpc = new ec2.Vpc(this, "Vpc", {
-      natGatewayProvider: ec2.NatInstanceProvider.instance({
-        instanceType: new ec2.InstanceType("t2.nano"),
+    const vpc = new aws_ec2.Vpc(this, "Vpc", {
+      natGatewayProvider: aws_ec2.NatInstanceProvider.instance({
+        instanceType: new aws_ec2.InstanceType("t2.nano"),
       }),
       subnetConfiguration: [
         {
           cidrMask: 24,
           name: "ingress",
-          subnetType: ec2.SubnetType.PUBLIC,
+          subnetType: aws_ec2.SubnetType.PUBLIC,
         },
         {
           cidrMask: 24,
           name: "application",
-          subnetType: ec2.SubnetType.PRIVATE,
+          subnetType: aws_ec2.SubnetType.PRIVATE,
         },
         {
           cidrMask: 28,
           name: "rds",
-          subnetType: ec2.SubnetType.ISOLATED,
+          subnetType: aws_ec2.SubnetType.ISOLATED,
         },
       ],
     });
 
+    const dbAccessSG = new aws_ec2.SecurityGroup(this, "DBAccessSG", {
+      vpc,
+      description: "for accessing database",
+      securityGroupName: "Database Access",
+    });
+
+    const dbSG = new aws_ec2.SecurityGroup(this, "DBSG", {
+      vpc,
+      description: "for database",
+      securityGroupName: "Database",
+    });
+    dbSG.addIngressRule(
+      dbAccessSG,
+      aws_ec2.Port.tcp(3306),
+      `from application with sg named ${dbAccessSG.securityGroupName}`
+    );
+
     this.vpc = vpc;
+    this.dbAccessSG = dbAccessSG;
+    this.dbSG = dbSG;
   }
 }
