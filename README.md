@@ -2,8 +2,48 @@
 
 ## setup
 
+### setup mysql
+
+- install mysql
+- create user
+- create database
+- permit user to access database
+
+### yarn install
+
 ```sh
 yarn
+```
+
+### .env file
+
+```sh
+cp packages/server/.env.example packages/server/.env
+```
+
+fix `DATABASE_URL=""` in packages/server/.env as following:
+https://www.prisma.io/docs/concepts/database-connectors/mysql#connection-url
+
+### prisma migrate
+
+```sh
+cd packages/server
+yarn prisma migrate
+```
+
+### start server
+
+```sh
+cd packages/server
+yarn start
+```
+
+## deploying
+
+```sh
+yarn
+cd packages/cdk
+yarn cdk deploy --all
 ```
 
 ## load map
