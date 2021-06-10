@@ -3,6 +3,71 @@
 exports[`snapshot test 1`] = `
 Object {
   "Resources": Object {
+    "DBAccessSGBB77343E": Object {
+      "Properties": Object {
+        "GroupDescription": "for accessing database",
+        "GroupName": "Database Access",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "DBSG9487F3EF": Object {
+      "Properties": Object {
+        "GroupDescription": "for database",
+        "GroupName": "Database",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "DBSGfromTargetDBAccessSGA573EF9C33062F29BB9A": Object {
+      "Properties": Object {
+        "Description": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "from application with sg named ",
+              Object {
+                "Ref": "DBAccessSGBB77343E",
+              },
+            ],
+          ],
+        },
+        "FromPort": 3306,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "DBSG9487F3EF",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "DBAccessSGBB77343E",
+            "GroupId",
+          ],
+        },
+        "ToPort": 3306,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
     "Vpc8378EB38": Object {
       "Properties": Object {
         "CidrBlock": "10.0.0.0/16",

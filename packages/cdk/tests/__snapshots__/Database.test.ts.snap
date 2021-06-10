@@ -9,6 +9,7 @@ Object {
         "DBSubnetGroupName": Object {
           "Ref": "AuroraSubnetsC4DF45C9",
         },
+        "DatabaseName": "tadb",
         "Engine": "aurora",
         "EngineMode": "serverless",
         "MasterUserPassword": Object {
@@ -27,10 +28,7 @@ Object {
         "StorageEncrypted": true,
         "VpcSecurityGroupIds": Array [
           Object {
-            "Fn::GetAtt": Array [
-              "AuroraSecurityGroup3440C66D",
-              "GroupId",
-            ],
+            "Fn::ImportValue": "dummyStack:ExportsOutputFnGetAttSecurityGroupDD263621GroupIdDF6F8B09",
           },
         ],
       },
@@ -49,34 +47,18 @@ Object {
       },
       "Type": "AWS::SecretsManager::SecretTargetAttachment",
     },
-    "AuroraSecurityGroup3440C66D": Object {
-      "Properties": Object {
-        "GroupDescription": "RDS security group",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "VpcId": Object {
-          "Fn::ImportValue": "Vpc:ExportsOutputRefVpc8378EB38272D6E3A",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
     "AuroraSubnetsC4DF45C9": Object {
       "Properties": Object {
         "DBSubnetGroupDescription": "Subnets for Aurora database",
         "SubnetIds": Array [
           Object {
-            "Fn::ImportValue": "Vpc:ExportsOutputRefVpcrdsSubnet1SubnetC2926CEA415B78A7",
+            "Fn::ImportValue": "dummyStack:ExportsOutputRefVpcrdsSubnet1SubnetC2926CEA415B78A7",
           },
           Object {
-            "Fn::ImportValue": "Vpc:ExportsOutputRefVpcrdsSubnet2Subnet70A835C80F5EB08B",
+            "Fn::ImportValue": "dummyStack:ExportsOutputRefVpcrdsSubnet2Subnet70A835C80F5EB08B",
           },
           Object {
-            "Fn::ImportValue": "Vpc:ExportsOutputRefVpcrdsSubnet3SubnetAA566B5A902489E7",
+            "Fn::ImportValue": "dummyStack:ExportsOutputRefVpcrdsSubnet3SubnetAA566B5A902489E7",
           },
         ],
       },

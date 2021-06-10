@@ -8,17 +8,20 @@ test("snapshot test", () => {
   const stack = new Stack(app, "dummyStack");
 
   const vpc = new aws_ec2.Vpc(stack, "Vpc");
+  const securityGroup = new aws_ec2.SecurityGroup(stack, "SecurityGroup", {
+    vpc,
+  });
   const dbCluster = new aws_rds.ServerlessCluster(stack, "ServerlessCluster", {
     engine: aws_rds.DatabaseClusterEngine.AURORA,
     vpc,
   });
 
   const target = new ApiServerStack(app, "Target", {
-    codeEntry: path.resolve(__dirname, "dummy/dummy.ts"),
+    codeEntry: path.resolve(__dirname, "dummy/src/index.ts"),
     vpc,
-    dbHost: "test-dbHost",
-    dbPort: "test-dbPort",
-    dbCredentialSecretName: "test-dbCredentialSecretName",
+    securityGroup,
+    dbCredentialSecret: dbCluster.secret!,
+    userPoolArn: "test-userPoolArn",
   });
 
   expect(SynthUtils.toCloudFormation(target)).toMatchSnapshot();
