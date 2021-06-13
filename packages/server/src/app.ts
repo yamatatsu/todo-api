@@ -1,17 +1,19 @@
 import express from "express";
-import { PrismaClient } from "@prisma/client";
-import { getDbUrl } from "./constants";
-
-const prismaPromise = getDbUrl().then(
-  (url) => new PrismaClient({ datasources: { db: { url } } })
-);
+import { json } from "body-parser";
+import userGet from "./handlers/userGet";
+import userCreate from "./handlers/userCreate";
 
 const app = express();
 export default app;
 
-app.get("/", async (req, res) => {
-  const prisma = await prismaPromise;
-  const allUsers = await prisma.user.findMany();
-
-  res.send(`Hello World. ${JSON.stringify(allUsers, null, 2)}`);
+app.use((req, res, next) => {
+  res.removeHeader("X-Powered-By");
+  next();
 });
+app.use(json({ type: "application/json" }));
+
+app.get("/", async (req, res) => {
+  res.send("OK.");
+});
+app.get("/user/:id", userGet);
+app.post("/user", userCreate);
