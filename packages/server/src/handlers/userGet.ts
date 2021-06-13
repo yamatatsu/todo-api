@@ -3,7 +3,7 @@ import * as zod from "zod";
 import getPrisma from "../db";
 
 const schema = zod.object({
-  id: zod.string().regex(/^\d+$/),
+  id: zod.string().regex(/^\d+$/).transform(Number),
 });
 
 const handler: Handler = async (req, res) => {
@@ -16,7 +16,7 @@ const handler: Handler = async (req, res) => {
 
   const prisma = await getPrisma();
   const result = await prisma.user.findUnique({
-    where: { id: parseInt(_res.data.id) },
+    where: { id: _res.data.id },
   });
 
   if (!result) {

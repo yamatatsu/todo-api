@@ -24,7 +24,7 @@ test("必須チェックエラーとなること", async () => {
   const res = await request(app).post("/user").send(body);
 
   expect(res.body).toEqual({
-    errors: [
+    issues: [
       {
         code: "invalid_type",
         expected: "string",
