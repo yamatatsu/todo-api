@@ -77,19 +77,18 @@ yarn prisma migrate deploy
 1. architecture overview
    - [x] base of cdk
    - [x] deploy all resourse
-   - [x] integration
+   - [ ] integration
    - [ ] db migration pipline
 1. rest server on local
    - [x] setup prisma
      - https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch-typescript-postgres
      - https://www.prisma.io/docs/concepts/components/prisma-migrate/shadow-database
      - https://www.prisma.io/docs/guides/performance-and-optimization/connection-management
-   - [ ] setup express
-   - [ ] express on lambda
+   - [x] setup express
+   - [x] express on lambda
    - [ ] restful api
 1. integration
-   - [ ] e2e test
-   - [ ] synthetics monitor
+   - [x] e2e test
    - [ ] documentation
 1. definition of done
    - [ ] design of architecture
@@ -98,6 +97,10 @@ yarn prisma migrate deploy
    - [ ] test code
    - [ ] playbook for launching application
 1. 思いつき
+   - Cognito 込みでテストできる画面
+   - CI/CD
+   - テストしやすい docker compose 環境
    - 楽観ロック
    - done API
    - init via Cognito Sign Up
+   - synthetics monitor

@@ -7,7 +7,7 @@ export const PRODUCTION = NODE_ENV === "production";
 export async function getDbUrl() {
   if (PRODUCTION) {
     const { engine, username, password, host, port } = await getSecret();
-    console.log({ engine, username, host, port });
+    console.info({ engine, host, port });
 
     return `${engine}://${username}:${password}@${host}:${port}/tadb`;
   } else {
