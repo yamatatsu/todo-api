@@ -4,6 +4,7 @@ import { setupPrisma } from "./helper";
 
 setupPrisma();
 
+jest.retryTimes(2);
 test("ユーザーが作成できること", async () => {
   const body = {
     sub: "test-sub",
@@ -17,6 +18,7 @@ test("ユーザーが作成できること", async () => {
     name: "test-name",
   });
 });
+
 test("必須チェックエラーとなること", async () => {
   const body = {};
   const res = await request(app).post("/user").send(body);

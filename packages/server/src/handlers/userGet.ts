@@ -3,14 +3,26 @@ import * as zod from "zod";
 import getPrisma from "../db";
 
 const schema = zod.object({
-  id: zod.string(),
+  id: zod.string().regex(/^\d+$/),
 });
 
 const handler: Handler = async (req, res) => {
-  const { id } = schema.parse(req.params);
+  const _res = schema.safeParse(req.params);
+
+  if (!_res.success) {
+    res.sendStatus(404);
+    return;
+  }
 
   const prisma = await getPrisma();
-  const result = await prisma.user.findFirst({ where: { id: parseInt(id) } });
-  res.send(result);
+  const result = await prisma.user.findUnique({
+    where: { id: parseInt(_res.data.id) },
+  });
+
+  if (!result) {
+    res.sendStatus(404);
+  } else {
+    res.json(result);
+  }
 };
 export default handler;
