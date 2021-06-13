@@ -15,8 +15,19 @@ const handler: Handler = async (req, res) => {
   }
 
   const prisma = await getPrisma();
-  const result = await prisma.user.create({ data: _res.data });
 
+  const result = await prisma.user.create({
+    data: {
+      ..._res.data,
+      boards: {
+        create: {
+          title: "Default",
+          tasks: { create: { title: "Great Awesome Tutorial" } },
+        },
+      },
+    },
+    include: { boards: { include: { tasks: true } } },
+  });
   res.json(result);
 };
 export default handler;

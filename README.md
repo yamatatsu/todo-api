@@ -97,3 +97,7 @@ yarn prisma migrate deploy
    - [ ] implimentation
    - [ ] test code
    - [ ] playbook for launching application
+1. 思いつき
+   - 楽観ロック
+   - done API
+   - init via Cognito Sign Up

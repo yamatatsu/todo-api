@@ -16,6 +16,26 @@ test("ユーザーが作成できること", async () => {
     id: expect.any(Number),
     sub: "test-sub",
     name: "test-name",
+    boards: [
+      {
+        id: expect.any(Number),
+        authorId: expect.any(Number),
+        title: "Default",
+        description: null,
+        createdAt: expect.any(String),
+        updatedAt: expect.any(String),
+        tasks: [
+          {
+            id: expect.any(Number),
+            boardId: expect.any(Number),
+            title: "Great Awesome Tutorial",
+            description: null,
+            createdAt: expect.any(String),
+            updatedAt: expect.any(String),
+          },
+        ],
+      },
+    ],
   });
 });
 

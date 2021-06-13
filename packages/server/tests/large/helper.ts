@@ -6,16 +6,16 @@ export function setupPrisma() {
 
   beforeEach(async () => {
     await prisma.$transaction([
-      prisma.user.deleteMany(),
-      prisma.board.deleteMany(),
       prisma.task.deleteMany(),
+      prisma.board.deleteMany(),
+      prisma.user.deleteMany(),
     ]);
   });
   afterAll(async () => {
     await prisma.$transaction([
-      prisma.user.deleteMany(),
-      prisma.board.deleteMany(),
       prisma.task.deleteMany(),
+      prisma.board.deleteMany(),
+      prisma.user.deleteMany(),
     ]);
     await prisma.$disconnect();
     await getPrisma().then((_prisma) => _prisma.$disconnect());

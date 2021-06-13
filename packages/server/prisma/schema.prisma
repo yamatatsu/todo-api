@@ -1,14 +1,11 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-1.0.x"]
+}
 
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
-}
-
-generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native", "rhel-openssl-1.0.x"]
 }
 
 model User {
@@ -22,19 +19,23 @@ model Board {
   id          Int      @id @default(autoincrement())
   title       String   @db.VarChar(255)
   description String?
-  author      User     @relation(fields: [authorId], references: [id])
   authorId    Int
-  Task        Task[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  author      User     @relation(fields: [authorId], references: [id])
+  tasks       Task[]
+
+  @@index([authorId], name: "authorId")
 }
 
 model Task {
   id          Int      @id @default(autoincrement())
   title       String   @db.VarChar(255)
   description String?
-  board       Board    @relation(fields: [boardId], references: [id])
   boardId     Int
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  board       Board    @relation(fields: [boardId], references: [id])
+
+  @@index([boardId], name: "boardId")
 }
