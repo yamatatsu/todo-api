@@ -10,26 +10,63 @@ import {
 
 type Props = StackProps & {
   vpc: aws_ec2.IVpc;
-  securityGroup: aws_ec2.ISecurityGroup;
+  // securityGroup: aws_ec2.ISecurityGroup;
 };
 
 export class DatabaseStack extends Stack {
+  public readonly dbAccessSG: aws_ec2.ISecurityGroup;
+  // public readonly dbSG: aws_ec2.ISecurityGroup;
   public readonly dbCredentialSecret: aws_secretsmanager.ISecret;
+  public readonly proxy: aws_rds.IDatabaseProxy;
 
   constructor(parent: App, id: string, props: Props) {
     super(parent, id, props);
 
-    const dbCluster = new aws_rds.ServerlessCluster(this, "Aurora", {
-      engine: aws_rds.DatabaseClusterEngine.AURORA,
-      credentials: aws_rds.Credentials.fromGeneratedSecret("LambdaRdsProxy"),
-      defaultDatabaseName: "tadb",
+    /**
+     * DB接続に関するSecurityGroupはここで作成する。
+     * VPCと一緒に作成すると循環参照になる。
+     * Respect for https://github.com/aws/aws-cdk/issues/13169
+     */
+    const dbAccessSG = new aws_ec2.SecurityGroup(this, "DBAccessSG", {
       vpc: props.vpc,
-      vpcSubnets: { subnetType: aws_ec2.SubnetType.ISOLATED },
-      securityGroups: [props.securityGroup],
+      description: "for accessing database",
+      securityGroupName: "Database Access",
+    });
+    const dbSG = new aws_ec2.SecurityGroup(this, "DBSG", {
+      vpc: props.vpc,
+      description: "for database",
+      securityGroupName: "Database",
+    });
+    dbSG.addIngressRule(
+      dbAccessSG,
+      aws_ec2.Port.tcp(3306),
+      `from application with sg named ${dbAccessSG.securityGroupName}`
+    );
+
+    const dbCluster = new aws_rds.DatabaseCluster(this, "Aurora", {
+      engine: aws_rds.DatabaseClusterEngine.AURORA,
+      credentials: aws_rds.Credentials.fromGeneratedSecret("dbAdmin"),
+      defaultDatabaseName: "tadb",
+      instanceProps: {
+        vpc: props.vpc,
+        vpcSubnets: { subnetType: aws_ec2.SubnetType.ISOLATED },
+        securityGroups: [dbSG],
+      },
       removalPolicy: RemovalPolicy.DESTROY,
     });
 
-    // production codeではないので、カジュアルに`!`使う
-    this.dbCredentialSecret = dbCluster.secret!;
+    const dbCredentialSecret = dbCluster.secret!; // production codeではないので、カジュアルに`!`使う
+
+    const proxy = dbCluster.addProxy("RdsProxy", {
+      vpc: props.vpc,
+      secrets: [dbCredentialSecret],
+      securityGroups: [dbSG],
+    });
+    // proxy.connections.allowFromAnyIpv4(aws_ec2.Port.tcp(3306));
+
+    this.dbAccessSG = dbAccessSG;
+    // this.dbSG = dbSG;
+    this.dbCredentialSecret = dbCredentialSecret;
+    this.proxy = proxy;
   }
 }

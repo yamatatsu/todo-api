@@ -7,7 +7,7 @@ import {
 } from "aws-cdk-lib";
 
 export class CognitoStack extends Stack {
-  public readonly userPoolArn: string;
+  public readonly userPool: aws_cognito.IUserPool;
 
   constructor(parent: App, id: string, props?: StackProps) {
     super(parent, id, props);
@@ -37,6 +37,6 @@ export class CognitoStack extends Stack {
       authFlows: { userSrp: true },
     });
 
-    this.userPoolArn = userPool.userPoolArn;
+    this.userPool = userPool;
   }
 }

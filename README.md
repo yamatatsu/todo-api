@@ -98,6 +98,7 @@ yarn prisma migrate deploy
    - [ ] playbook for launching application
 1. 思いつき
    - Cognito 込みでテストできる画面
+   - nat 落とす
    - CI/CD
    - テストしやすい docker compose 環境
    - 楽観ロック

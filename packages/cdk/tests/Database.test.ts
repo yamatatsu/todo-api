@@ -19,10 +19,8 @@ test("snapshot test", () => {
       { name: "rds", subnetType: aws_ec2.SubnetType.ISOLATED },
     ],
   });
-  const securityGroup = new aws_ec2.SecurityGroup(stack, "SecurityGroup", {
-    vpc,
-  });
-  const target = new DatabaseStack(app, "Target", { vpc, securityGroup, env });
+
+  const target = new DatabaseStack(app, "Target", { vpc, env });
 
   expect(SynthUtils.toCloudFormation(target)).toMatchSnapshot();
 });

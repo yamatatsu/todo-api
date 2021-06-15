@@ -41,11 +41,12 @@ Object {
           "S3Bucket": Object {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "d73f5ed7ebb4a8f849c094953f83ed97c03a82e83ee59840e888001b1a1d2bd1.zip",
+          "S3Key": "8652cc69c513d2778f3fdb3e941c7398b898b82cfcee4a0fa3c4fb9453124da5.zip",
         },
         "Environment": Object {
           "Variables": Object {
             "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+            "DATABASE_ENDPOINT": "test-proxyEndpoint",
             "NODE_ENV": "production",
             "SECRET_NAME": Object {
               "Fn::Join": Array [
@@ -64,7 +65,7 @@ Object {
                                 "Fn::Split": Array [
                                   ":",
                                   Object {
-                                    "Fn::ImportValue": "dummyStack:ExportsOutputRefServerlessClusterSecret9585927A673F04D9",
+                                    "Fn::ImportValue": "dummyStack:ExportsOutputRefSecretA720EF052D953DED",
                                   },
                                 ],
                               },
@@ -87,7 +88,7 @@ Object {
                                 "Fn::Split": Array [
                                   ":",
                                   Object {
-                                    "Fn::ImportValue": "dummyStack:ExportsOutputRefServerlessClusterSecret9585927A673F04D9",
+                                    "Fn::ImportValue": "dummyStack:ExportsOutputRefSecretA720EF052D953DED",
                                   },
                                 ],
                               },
@@ -524,7 +525,7 @@ Object {
               ],
               "Effect": "Allow",
               "Resource": Object {
-                "Fn::ImportValue": "dummyStack:ExportsOutputRefServerlessClusterSecretAttachment796187775C0CEA0D",
+                "Fn::ImportValue": "dummyStack:ExportsOutputRefSecretA720EF052D953DED",
               },
             },
           ],

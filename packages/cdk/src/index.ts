@@ -3,6 +3,7 @@ import { App, Environment } from "aws-cdk-lib";
 import { CognitoStack } from "./Cognito";
 import { VpcStack } from "./Vpc";
 import { DatabaseStack } from "./Database";
+import { DatabaseProxyStack } from "./DatabaseProxy";
 import { ApiServerStack } from "./ApiServer";
 import { MigraterStack } from "./Migrater";
 import { BastionStack } from "./Bastion";
@@ -18,31 +19,39 @@ const env: Environment = {
 };
 
 const cognito = new CognitoStack(app, `${envName}-TodoApi-Cognito`, { env });
-const { vpc, dbSG, dbAccessSG } = new VpcStack(app, `${envName}-TodoApi-Vpc`, {
+const { vpc } = new VpcStack(app, `${envName}-TodoApi-Vpc`, {
   env,
 });
 const database = new DatabaseStack(app, `${envName}-TodoApi-Database`, {
   vpc,
-  securityGroup: dbSG,
+  // securityGroup: dbSG,
   env,
 });
+// new DatabaseProxyStack(app, `${envName}-TodoApi-DatabaseProxy`, {
+//   vpc,
+//   securityGroup: dbSG,
+//   cluster: database.dbCluster,
+//   secret: database.dbCredentialSecret,
+//   env,
+// });
 new ApiServerStack(app, `${envName}-TodoApi-ApiServer`, {
   codeEntry: path.resolve(__dirname, "../../server/src/index.ts"),
   vpc,
-  securityGroup: dbAccessSG,
+  securityGroup: database.dbAccessSG,
   dbCredentialSecret: database.dbCredentialSecret,
-  userPoolArn: cognito.userPoolArn,
+  proxyEndpoint: database.proxy.endpoint,
+  userPool: cognito.userPool,
   env,
 });
 new MigraterStack(app, `${envName}-TodoApi-Migrater`, {
   dockerfilePath: path.resolve(__dirname, "../../server"),
   vpc,
-  securityGroup: dbAccessSG,
+  securityGroup: database.dbAccessSG,
   dbCredentialSecret: database.dbCredentialSecret,
   env,
 });
 new BastionStack(app, `${envName}-TodoApi-Bastion`, {
   vpc,
-  securityGroup: dbAccessSG,
+  securityGroup: database.dbAccessSG,
   env,
 });

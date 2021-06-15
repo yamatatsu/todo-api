@@ -2,8 +2,8 @@ import { App, Stack, StackProps, aws_ec2 } from "aws-cdk-lib";
 
 export class VpcStack extends Stack {
   public readonly vpc: aws_ec2.IVpc;
-  public readonly dbAccessSG: aws_ec2.ISecurityGroup;
-  public readonly dbSG: aws_ec2.ISecurityGroup;
+  // public readonly dbAccessSG: aws_ec2.ISecurityGroup;
+  // public readonly dbSG: aws_ec2.ISecurityGroup;
 
   constructor(parent: App, id: string, props?: StackProps) {
     super(parent, id, props);
@@ -31,25 +31,25 @@ export class VpcStack extends Stack {
       ],
     });
 
-    const dbAccessSG = new aws_ec2.SecurityGroup(this, "DBAccessSG", {
-      vpc,
-      description: "for accessing database",
-      securityGroupName: "Database Access",
-    });
+    // const dbAccessSG = new aws_ec2.SecurityGroup(this, "DBAccessSG", {
+    //   vpc,
+    //   description: "for accessing database",
+    //   securityGroupName: "Database Access",
+    // });
 
-    const dbSG = new aws_ec2.SecurityGroup(this, "DBSG", {
-      vpc,
-      description: "for database",
-      securityGroupName: "Database",
-    });
-    dbSG.addIngressRule(
-      dbAccessSG,
-      aws_ec2.Port.tcp(3306),
-      `from application with sg named ${dbAccessSG.securityGroupName}`
-    );
+    // const dbSG = new aws_ec2.SecurityGroup(this, "DBSG", {
+    //   vpc,
+    //   description: "for database",
+    //   securityGroupName: "Database",
+    // });
+    // dbSG.addIngressRule(
+    //   dbAccessSG,
+    //   aws_ec2.Port.tcp(3306),
+    //   `from application with sg named ${dbAccessSG.securityGroupName}`
+    // );
 
     this.vpc = vpc;
-    this.dbAccessSG = dbAccessSG;
-    this.dbSG = dbSG;
+    // this.dbAccessSG = dbAccessSG;
+    // this.dbSG = dbSG;
   }
 }

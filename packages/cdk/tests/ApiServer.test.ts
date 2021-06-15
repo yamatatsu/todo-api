@@ -1,6 +1,12 @@
 import path from "path";
 import { SynthUtils } from "@aws-cdk/assert";
-import { App, aws_ec2, aws_rds, Stack } from "aws-cdk-lib";
+import {
+  App,
+  aws_cognito,
+  aws_ec2,
+  aws_secretsmanager,
+  Stack,
+} from "aws-cdk-lib";
 import { ApiServerStack } from "../src/ApiServer";
 
 test("snapshot test", () => {
@@ -11,17 +17,16 @@ test("snapshot test", () => {
   const securityGroup = new aws_ec2.SecurityGroup(stack, "SecurityGroup", {
     vpc,
   });
-  const dbCluster = new aws_rds.ServerlessCluster(stack, "ServerlessCluster", {
-    engine: aws_rds.DatabaseClusterEngine.AURORA,
-    vpc,
-  });
+  const secret = new aws_secretsmanager.Secret(stack, "Secret");
+  const userPool = new aws_cognito.UserPool(stack, "UserPool");
 
   const target = new ApiServerStack(app, "Target", {
     codeEntry: path.resolve(__dirname, "dummy/src/index.ts"),
     vpc,
     securityGroup,
-    dbCredentialSecret: dbCluster.secret!,
-    userPoolArn: "test-userPoolArn",
+    dbCredentialSecret: secret,
+    proxyEndpoint: "test-proxyEndpoint",
+    userPool,
   });
 
   expect(SynthUtils.toCloudFormation(target)).toMatchSnapshot();

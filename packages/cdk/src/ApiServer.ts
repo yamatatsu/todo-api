@@ -8,6 +8,7 @@ import {
   aws_apigateway,
   aws_secretsmanager,
   Duration,
+  aws_cognito,
 } from "aws-cdk-lib";
 
 type Props = StackProps & {
@@ -15,7 +16,8 @@ type Props = StackProps & {
   vpc: aws_ec2.IVpc;
   securityGroup: aws_ec2.ISecurityGroup;
   dbCredentialSecret: aws_secretsmanager.ISecret;
-  userPoolArn: string;
+  proxyEndpoint: string;
+  userPool: aws_cognito.IUserPool;
 };
 
 export class ApiServerStack extends Stack {
@@ -65,6 +67,7 @@ export class ApiServerStack extends Stack {
       environment: {
         NODE_ENV: "production",
         SECRET_NAME: props.dbCredentialSecret.secretName,
+        DATABASE_ENDPOINT: props.proxyEndpoint,
       },
     });
 
@@ -75,7 +78,7 @@ export class ApiServerStack extends Stack {
     //   "Authorizer",
     //   {
     //     cognitoUserPools: [],
-    //     identitySource: "method.request.header.x-mpftoken",
+    //     identitySource: "method.request.header.x-ta-token",
     //   }
     // );
 
