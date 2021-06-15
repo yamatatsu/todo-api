@@ -81,7 +81,7 @@ Object {
         ],
         "DBProxyName": "RdsProxy",
         "EngineFamily": "MYSQL",
-        "RequireTLS": true,
+        "RequireTLS": false,
         "RoleArn": Object {
           "Fn::GetAtt": Array [
             "AuroraRdsProxyIAMRole6EFC0823",
@@ -229,13 +229,6 @@ Object {
       "Properties": Object {
         "GroupDescription": "for database",
         "GroupName": "Database",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
         "VpcId": Object {
           "Fn::ImportValue": "dummyStack:ExportsOutputRefVpc8378EB38272D6E3A",
         },
@@ -303,6 +296,37 @@ Object {
         },
       },
       "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "DBSGtoTargetDBSG2D7B6556IndirectPortCDBCE918": Object {
+      "Properties": Object {
+        "Description": "Allow connections to the database Cluster from the Proxy",
+        "DestinationSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "DBSG9487F3EF",
+            "GroupId",
+          ],
+        },
+        "FromPort": Object {
+          "Fn::GetAtt": Array [
+            "Aurora2CBAB212",
+            "Endpoint.Port",
+          ],
+        },
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "DBSG9487F3EF",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": Object {
+          "Fn::GetAtt": Array [
+            "Aurora2CBAB212",
+            "Endpoint.Port",
+          ],
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroupEgress",
     },
     "TargetAuroraSecret852055C73fdaad7efa858a3daf9490cf0a702aeb": Object {
       "Properties": Object {

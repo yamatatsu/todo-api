@@ -9,7 +9,10 @@ export async function getDbUrl() {
     const { engine, username, password, host, port } = await getSecret();
     console.info({ engine, host, port });
 
-    return `${engine}://${username}:${password}@${host}:${port}/tadb`;
+    const endpoint = getEnv("DATABASE_ENDPOINT");
+    console.info({ endpoint });
+
+    return `${engine}://${username}:${password}@${endpoint}/tadb`;
   } else {
     return getEnv("DATABASE_URL");
   }

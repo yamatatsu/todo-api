@@ -28,8 +28,7 @@ export class ApiServerStack extends Stack {
     const handler = new aws_lambda_nodejs.NodejsFunction(this, "Lambda", {
       entry: props.codeEntry,
       runtime: aws_lambda.Runtime.NODEJS_14_X,
-      // TODO: aurora serverless やめて rds proxyつけたら10秒に戻す
-      timeout: Duration.seconds(20),
+      timeout: Duration.seconds(10),
       vpc: props.vpc,
       securityGroups: [props.securityGroup],
       bundling: {

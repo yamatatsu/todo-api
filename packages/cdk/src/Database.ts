@@ -36,6 +36,7 @@ export class DatabaseStack extends Stack {
       vpc: props.vpc,
       description: "for database",
       securityGroupName: "Database",
+      allowAllOutbound: false,
     });
     dbSG.addIngressRule(
       dbAccessSG,
@@ -55,17 +56,17 @@ export class DatabaseStack extends Stack {
       removalPolicy: RemovalPolicy.DESTROY,
     });
 
-    const dbCredentialSecret = dbCluster.secret!; // production codeではないので、カジュアルに`!`使う
+    // production codeではないので、カジュアルに`!`使う
+    const dbCredentialSecret = dbCluster.secret!;
 
     const proxy = dbCluster.addProxy("RdsProxy", {
       vpc: props.vpc,
       secrets: [dbCredentialSecret],
       securityGroups: [dbSG],
+      requireTLS: false,
     });
-    // proxy.connections.allowFromAnyIpv4(aws_ec2.Port.tcp(3306));
 
     this.dbAccessSG = dbAccessSG;
-    // this.dbSG = dbSG;
     this.dbCredentialSecret = dbCredentialSecret;
     this.proxy = proxy;
   }

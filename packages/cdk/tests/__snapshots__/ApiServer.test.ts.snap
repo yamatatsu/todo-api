@@ -41,7 +41,7 @@ Object {
           "S3Bucket": Object {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "8652cc69c513d2778f3fdb3e941c7398b898b82cfcee4a0fa3c4fb9453124da5.zip",
+          "S3Key": "977855615fdd8f493b21b54b00ec7315fe6ecedc7903cf36cebbd969b53ea8c2.zip",
         },
         "Environment": Object {
           "Variables": Object {
@@ -111,7 +111,7 @@ Object {
           ],
         },
         "Runtime": "nodejs14.x",
-        "Timeout": 20,
+        "Timeout": 10,
         "VpcConfig": Object {
           "SecurityGroupIds": Array [
             Object {
