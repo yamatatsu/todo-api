@@ -1,7 +1,9 @@
 import express from "express";
 import { json } from "body-parser";
+import awsServerlessExpressMiddleware from "aws-serverless-express/middleware";
 import userGet from "./handlers/userGet";
 import userCreate from "./handlers/userCreate";
+// import tasksSearch from "./handlers/tasksSearch";
 
 const app = express();
 export default app;
@@ -11,6 +13,7 @@ app.use((req, res, next) => {
   next();
 });
 app.use(json({ type: "application/json" }));
+app.use(awsServerlessExpressMiddleware.eventContext());
 
 app.get("/", async (req, res) => {
   res.send("OK.");
@@ -19,7 +22,7 @@ app.get("/", async (req, res) => {
  * 単一のUserを返す。
  * Userに紐づくBoardの一覧も返す
  */
-app.get("/user/:id", userGet);
+app.get("/user", userGet);
 /**
  * Userを作成する。
  * 必要なデータの初期化も同時に行う

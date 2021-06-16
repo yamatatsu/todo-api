@@ -31,6 +31,22 @@ Object {
     },
   },
   "Resources": Object {
+    "AuthorizerBD825682": Object {
+      "Properties": Object {
+        "IdentitySource": "method.request.header.x-ta-token",
+        "Name": "TargetAuthorizer3C2C1012",
+        "ProviderARNs": Array [
+          Object {
+            "Fn::ImportValue": "dummyStack:ExportsOutputFnGetAttUserPool6BA7E5F2Arn686ACC00",
+          },
+        ],
+        "RestApiId": Object {
+          "Ref": "LambdaRestApi95870433",
+        },
+        "Type": "COGNITO_USER_POOLS",
+      },
+      "Type": "AWS::ApiGateway::Authorizer",
+    },
     "LambdaD247545B": Object {
       "DependsOn": Array [
         "LambdaServiceRoleDefaultPolicyDAE46E21",
@@ -41,7 +57,7 @@ Object {
           "S3Bucket": Object {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "1e9eeb14713f91fe187e2e00828779bbc70604a11b0d5718f3c21bf817a6aeb3.zip",
+          "S3Key": "6f35d659e3253e19cd78904d5b2403e0e4e8e4d4df338ad1e4cdd9027b9286af.zip",
         },
         "Environment": Object {
           "Variables": Object {
@@ -138,7 +154,10 @@ Object {
     },
     "LambdaRestApiANYA831AD87": Object {
       "Properties": Object {
-        "AuthorizationType": "NONE",
+        "AuthorizationType": "COGNITO_USER_POOLS",
+        "AuthorizerId": Object {
+          "Ref": "AuthorizerBD825682",
+        },
         "HttpMethod": "ANY",
         "Integration": Object {
           "IntegrationHttpMethod": "POST",
@@ -302,7 +321,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "LambdaRestApiDeploymentBA64057892a03aa3de385b7e238c0c5fa5761f5d": Object {
+    "LambdaRestApiDeploymentBA6405787faa1a3d290728cb9c0f190fc2082e92": Object {
       "DependsOn": Array [
         "LambdaRestApiproxyANY93D43CC0",
         "LambdaRestApiproxy9F99E187",
@@ -319,7 +338,7 @@ Object {
     "LambdaRestApiDeploymentStageprodB1F3862A": Object {
       "Properties": Object {
         "DeploymentId": Object {
-          "Ref": "LambdaRestApiDeploymentBA64057892a03aa3de385b7e238c0c5fa5761f5d",
+          "Ref": "LambdaRestApiDeploymentBA6405787faa1a3d290728cb9c0f190fc2082e92",
         },
         "MethodSettings": Array [
           Object {
@@ -355,7 +374,10 @@ Object {
     },
     "LambdaRestApiproxyANY93D43CC0": Object {
       "Properties": Object {
-        "AuthorizationType": "NONE",
+        "AuthorizationType": "COGNITO_USER_POOLS",
+        "AuthorizerId": Object {
+          "Ref": "AuthorizerBD825682",
+        },
         "HttpMethod": "ANY",
         "Integration": Object {
           "IntegrationHttpMethod": "POST",

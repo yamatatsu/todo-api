@@ -72,14 +72,14 @@ export class ApiServerStack extends Stack {
 
     props.dbCredentialSecret.grantRead(handler);
 
-    // const authorizer = new aws_apigateway.CognitoUserPoolsAuthorizer(
-    //   this,
-    //   "Authorizer",
-    //   {
-    //     cognitoUserPools: [],
-    //     identitySource: "method.request.header.x-ta-token",
-    //   }
-    // );
+    const authorizer = new aws_apigateway.CognitoUserPoolsAuthorizer(
+      this,
+      "Authorizer",
+      {
+        cognitoUserPools: [props.userPool],
+        identitySource: "method.request.header.x-ta-token",
+      }
+    );
 
     const restApi = new aws_apigateway.LambdaRestApi(this, "LambdaRestApi", {
       handler,
@@ -89,9 +89,9 @@ export class ApiServerStack extends Stack {
         dataTraceEnabled: true,
         tracingEnabled: true,
       },
-      // defaultMethodOptions: {
-      //   authorizer,
-      // },
+      defaultMethodOptions: {
+        authorizer,
+      },
     });
   }
 }

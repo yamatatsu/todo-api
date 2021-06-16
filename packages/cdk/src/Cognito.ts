@@ -34,7 +34,7 @@ export class CognitoStack extends Stack {
 
     new aws_cognito.UserPoolClient(this, "UserPoolClient", {
       userPool,
-      authFlows: { userSrp: true },
+      authFlows: { userSrp: true, userPassword: true },
     });
 
     this.userPool = userPool;

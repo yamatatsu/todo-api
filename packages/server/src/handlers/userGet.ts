@@ -1,22 +1,16 @@
 import { Handler } from "express";
-import * as zod from "zod";
 import getPrisma from "../db";
 
-const schema = zod.object({
-  id: zod.string().regex(/^\d+$/).transform(Number),
-});
-
 const handler: Handler = async (req, res) => {
-  const _res = schema.safeParse(req.params);
-
-  if (!_res.success) {
-    res.sendStatus(404);
-    return;
+  const sub = req.apiGateway?.event.requestContext.authorizer?.claims.sub;
+  if (!sub) {
+    // api gatewayを通過したのにsubが無いのはシステムエラー
+    throw new Error("No sub was provided.");
   }
 
   const prisma = await getPrisma();
   const result = await prisma.user.findUnique({
-    where: { id: _res.data.id },
+    where: { sub },
   });
 
   if (!result) {
