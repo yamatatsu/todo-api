@@ -39,6 +39,7 @@ new MigraterStack(app, `${envName}-TodoApi-Migrater`, {
   vpc,
   securityGroup: database.dbAccessSG,
   dbCredentialSecret: database.dbCredentialSecret,
+  proxyEndpoint: database.proxy.endpoint,
   env,
 });
 new BastionStack(app, `${envName}-TodoApi-Bastion`, {

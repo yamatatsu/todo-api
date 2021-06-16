@@ -13,6 +13,7 @@ type Props = StackProps & {
   vpc: aws_ec2.IVpc;
   securityGroup: aws_ec2.ISecurityGroup;
   dbCredentialSecret: aws_secretsmanager.ISecret;
+  proxyEndpoint: string;
 };
 
 /**
@@ -32,6 +33,7 @@ export class MigraterStack extends Stack {
       securityGroups: [props.securityGroup],
       environment: {
         SECRET_NAME: props.dbCredentialSecret.secretName,
+        DATABASE_ENDPOINT: props.proxyEndpoint,
       },
     });
 

@@ -1,0 +1,173 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshot test 1`] = `
+Object {
+  "Resources": Object {
+    "LambdaD247545B": Object {
+      "DependsOn": Array [
+        "LambdaServiceRoleDefaultPolicyDAE46E21",
+        "LambdaServiceRoleA8ED4D3B",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "ImageUri": Object {
+            "Fn::Sub": "\${AWS::AccountId}.dkr.ecr.\${AWS::Region}.\${AWS::URLSuffix}/cdk-hnb659fds-container-assets-\${AWS::AccountId}-\${AWS::Region}:4b876f80f5f7d09e3c026c3904b4c5ef7b6eb18b1602e8e52147695595eb474c",
+          },
+        },
+        "Environment": Object {
+          "Variables": Object {
+            "DATABASE_ENDPOINT": "test-proxyEndpoint",
+            "SECRET_NAME": Object {
+              "Fn::Join": Array [
+                "-",
+                Array [
+                  Object {
+                    "Fn::Select": Array [
+                      0,
+                      Object {
+                        "Fn::Split": Array [
+                          "-",
+                          Object {
+                            "Fn::Select": Array [
+                              6,
+                              Object {
+                                "Fn::Split": Array [
+                                  ":",
+                                  Object {
+                                    "Fn::ImportValue": "dummyStack:ExportsOutputRefSecretA720EF052D953DED",
+                                  },
+                                ],
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                  Object {
+                    "Fn::Select": Array [
+                      1,
+                      Object {
+                        "Fn::Split": Array [
+                          "-",
+                          Object {
+                            "Fn::Select": Array [
+                              6,
+                              Object {
+                                "Fn::Split": Array [
+                                  ":",
+                                  Object {
+                                    "Fn::ImportValue": "dummyStack:ExportsOutputRefSecretA720EF052D953DED",
+                                  },
+                                ],
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              ],
+            },
+          },
+        },
+        "FunctionName": "Target-Fn",
+        "PackageType": "Image",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "LambdaServiceRoleA8ED4D3B",
+            "Arn",
+          ],
+        },
+        "Timeout": 300,
+        "VpcConfig": Object {
+          "SecurityGroupIds": Array [
+            Object {
+              "Fn::ImportValue": "dummyStack:ExportsOutputFnGetAttSecurityGroupDD263621GroupIdDF6F8B09",
+            },
+          ],
+          "SubnetIds": Array [
+            Object {
+              "Fn::ImportValue": "dummyStack:ExportsOutputRefVpcPrivateSubnet1Subnet536B997AFD4CC940",
+            },
+            Object {
+              "Fn::ImportValue": "dummyStack:ExportsOutputRefVpcPrivateSubnet2Subnet3788AAA1380949A3",
+            },
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "LambdaServiceRoleA8ED4D3B": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "LambdaServiceRoleDefaultPolicyDAE46E21": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:DescribeSecret",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::ImportValue": "dummyStack:ExportsOutputRefSecretA720EF052D953DED",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "LambdaServiceRoleDefaultPolicyDAE46E21",
+        "Roles": Array [
+          Object {
+            "Ref": "LambdaServiceRoleA8ED4D3B",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+  },
+}
+`;

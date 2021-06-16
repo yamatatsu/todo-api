@@ -48,28 +48,10 @@ yarn cdk deploy --all
 
 ## db migration
 
-マネジメントコンソールを使って、AWS system manager session manager で Bastion サーバーに入る。
+適切な IAM 権限を持って以下を実行する
 
 ```sh
-cd ~/
-
-sudo yum update -y
-sudo yum install git -y
-
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
-. ~/.nvm/nvm.sh
-nvm install node
-npm i -g yarn
-
-git clone https://github.com/yamatatsu/todo-api.git
-cd todo-api/
-
-yarn
-
-cd packages/server
-echo 'DATABASE_URL="${ AuroraのURL }"' > .env
-
-yarn prisma migrate deploy
+aws lambda invoke --function-name development-TodoApi-Migrater-Fn /dev/stdout
 ```
 
 ## load map
@@ -99,6 +81,7 @@ yarn prisma migrate deploy
 1. 思いつき
    - Cognito 込みでテストできる画面
    - nat 落とす
+   - Migrater の応答がエラーになっている
    - CI/CD
    - テストしやすい docker compose 環境
    - 楽観ロック
