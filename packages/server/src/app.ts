@@ -6,6 +6,7 @@ import userCreate from "./handlers/userCreate";
 import userUpdate from "./handlers/userUpdate";
 import boardCreate from "./handlers/boardCreate";
 import boardUpdate from "./handlers/boardUpdate";
+import boardDelete from "./handlers/boardDelete";
 import tasksSearch from "./handlers/tasksSearch";
 
 const app = express();
@@ -46,7 +47,7 @@ app.put("/board/:boardId", boardUpdate);
 /**
  * Boardを削除する。
  */
-// app.delete("/board", boardDelete);
+app.delete("/board/:boardId", boardDelete);
 /**
  * Taskの一覧を取得する
  */
