@@ -90,6 +90,9 @@ aws lambda invoke --function-name development-TodoApi-Migrater-Fn /dev/stdout
    - [ ] カバレッジ取る
    - [ ] テストの文言
    - [ ] テストしやすい docker compose 環境
+   - [ ] ログ設計
+   - [ ] lambda insight
+   - [ ] https://www.npmjs.com/package/@vendia/serverless-express
    - [ ] 楽観ロック
    - [ ] done API
    - [ ] init via Cognito Sign Up

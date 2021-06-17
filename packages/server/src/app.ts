@@ -3,6 +3,7 @@ import { json } from "body-parser";
 import awsServerlessExpressMiddleware from "aws-serverless-express/middleware";
 import userGet from "./handlers/userGet";
 import userCreate from "./handlers/userCreate";
+import userUpdate from "./handlers/userUpdate";
 import boardCreate from "./handlers/boardCreate";
 import tasksSearch from "./handlers/tasksSearch";
 
@@ -30,9 +31,25 @@ app.get("/user", userGet);
  */
 app.post("/user", userCreate);
 /**
+ * Userを更新する。
+ */
+app.put("/user", userUpdate);
+/**
+ * Userを削除する。
+ */
+// app.delete("/user", userDelete);
+/**
  * Boardを作成する。
  */
 app.post("/board", boardCreate);
+/**
+ * Boardを更新する。
+ */
+// app.put("/board", boardUpdate);
+/**
+ * Boardを削除する。
+ */
+// app.delete("/board", boardDelete);
 /**
  * Taskの一覧を取得する
  */
