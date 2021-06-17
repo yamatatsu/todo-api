@@ -5,6 +5,7 @@ import userGet from "./handlers/userGet";
 import userCreate from "./handlers/userCreate";
 import userUpdate from "./handlers/userUpdate";
 import boardCreate from "./handlers/boardCreate";
+import boardUpdate from "./handlers/boardUpdate";
 import tasksSearch from "./handlers/tasksSearch";
 
 const app = express();
@@ -35,17 +36,13 @@ app.post("/user", userCreate);
  */
 app.put("/user", userUpdate);
 /**
- * Userを削除する。
- */
-// app.delete("/user", userDelete);
-/**
  * Boardを作成する。
  */
 app.post("/board", boardCreate);
 /**
  * Boardを更新する。
  */
-// app.put("/board", boardUpdate);
+app.put("/board/:boardId", boardUpdate);
 /**
  * Boardを削除する。
  */

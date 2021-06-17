@@ -3,8 +3,11 @@ import { Prisma } from "@prisma/client";
 import * as zod from "zod";
 import getPrisma from "../db";
 
+const paramSchema = zod.object({
+  boardId: zod.string().regex(/^\d+$/).transform(Number),
+});
 const schema = zod.object({
-  title: zod.string(),
+  title: zod.string().optional(),
   description: zod.string().optional(),
 });
 
@@ -15,6 +18,12 @@ const handler: Handler = async (req, res) => {
     throw new Error("No sub was provided.");
   }
 
+  const paramValidationReslt = paramSchema.safeParse(req.params);
+  if (!paramValidationReslt.success) {
+    res.sendStatus(404);
+    return;
+  }
+
   const _res = schema.safeParse(req.body);
   if (!_res.success) {
     res.status(400).json(_res.error);
@@ -23,18 +32,18 @@ const handler: Handler = async (req, res) => {
 
   const prisma = await getPrisma();
 
-  const user = await prisma.user.findUnique({ where: { sub } });
-  if (!user) {
+  const result = await prisma.board.updateMany({
+    data: {
+      ..._res.data,
+    },
+    where: { id: paramValidationReslt.data.boardId, author: { sub } },
+  });
+
+  if (result.count === 0) {
+    console.info("No boards has updated.");
     res.sendStatus(404);
     return;
   }
-
-  const result = await prisma.board.create({
-    data: {
-      authorId: user.id,
-      ..._res.data,
-    },
-  });
 
   res.json(result);
 };

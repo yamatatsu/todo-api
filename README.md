@@ -82,6 +82,8 @@ aws lambda invoke --function-name development-TodoApi-Migrater-Fn /dev/stdout
 1. 思いつき
    - [x] Cognito 込みでテストできる画面
    - [ ] User の createdAt と updatedAt 忘れてた
+   - [ ] トランザクション見直し
+   - [ ] 入力チェック見直し
    - [ ] テスト: status の expext を追加
    - [ ] エラーレスポンスの統一
    - [ ] nat 落とす

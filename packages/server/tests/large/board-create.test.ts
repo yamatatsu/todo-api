@@ -54,7 +54,7 @@ test("必須チェックエラーとなること", async () => {
   });
 });
 
-test("400エラーとなること", async () => {
+test("404エラーとなること", async () => {
   const body = { title: "test-title", description: "test-description" };
   const res = await request(app)
     .post("/board")
@@ -62,9 +62,5 @@ test("400エラーとなること", async () => {
     .set("x-apigateway-event", getXApigatewayEvent("dummy-sub"))
     .set("x-apigateway-context", "{}");
 
-  expect(res.status).toEqual(400);
-  expect(res.body).toEqual({
-    message:
-      "This user has no user record. It is needed to create a user record.",
-  });
+  expect(res.status).toEqual(404);
 });
