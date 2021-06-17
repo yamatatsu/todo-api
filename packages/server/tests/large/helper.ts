@@ -22,3 +22,8 @@ export function setupPrisma() {
   });
   return prisma;
 }
+
+export const getXApigatewayEvent = (sub: string) =>
+  JSON.stringify({
+    requestContext: { authorizer: { claims: { sub } } },
+  });

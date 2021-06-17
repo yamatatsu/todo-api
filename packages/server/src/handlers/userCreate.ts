@@ -1,4 +1,5 @@
 import { Handler } from "express";
+import { Prisma } from "@prisma/client";
 import * as zod from "zod";
 import getPrisma from "../db";
 
@@ -19,19 +20,33 @@ const handler: Handler = async (req, res) => {
 
   const prisma = await getPrisma();
 
-  const result = await prisma.user.create({
-    data: {
-      ..._res.data,
-      sub,
-      boards: {
-        create: {
-          title: "Default",
-          tasks: { create: { title: "Great Awesome Tutorial" } },
+  let result;
+  try {
+    result = await prisma.user.create({
+      data: {
+        ..._res.data,
+        sub,
+        boards: {
+          create: {
+            title: "Default",
+            tasks: { create: { title: "Great Awesome Tutorial" } },
+          },
         },
       },
-    },
-    include: { boards: { include: { tasks: true } } },
-  });
+      include: { boards: { include: { tasks: true } } },
+    });
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === "P2002") {
+        res.status(400).json({
+          message: "A same sub user has found. This user has already created.",
+        });
+        return;
+      }
+    }
+    throw error;
+  }
+
   res.json(result);
 };
 export default handler;
