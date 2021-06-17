@@ -4,6 +4,8 @@ import { setupPrisma, getXApigatewayEvent } from "./helper";
 
 const prisma = setupPrisma();
 
+jest.retryTimes(2);
+
 test("単一のユーザーが取得できること", async () => {
   const data = await prisma.user.create({
     data: { sub: "test-sub", name: "test-name" },

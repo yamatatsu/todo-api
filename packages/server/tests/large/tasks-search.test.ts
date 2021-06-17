@@ -4,6 +4,8 @@ import { getXApigatewayEvent, setupPrisma } from "./helper";
 
 const prisma = setupPrisma();
 
+jest.retryTimes(2);
+
 test("複数のTaskが取得できること", async () => {
   const data = await prisma.user.create({
     data: {

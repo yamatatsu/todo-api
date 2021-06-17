@@ -5,6 +5,7 @@ import { setupPrisma, getXApigatewayEvent } from "./helper";
 const prisma = setupPrisma();
 
 jest.retryTimes(2);
+
 test("ユーザーが作成できること", async () => {
   const body = { name: "test-name" };
   const sub = "test-sub";
