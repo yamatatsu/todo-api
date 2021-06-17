@@ -80,13 +80,17 @@ aws lambda invoke --function-name development-TodoApi-Migrater-Fn /dev/stdout
    - [ ] test code
    - [ ] playbook for launching application
 1. 思いつき
-   - Cognito 込みでテストできる画面
-   - nat 落とす
-   - Migrater の応答がエラーになっている
-   - CI/CD
-   - テストの文言
-   - テストしやすい docker compose 環境
-   - 楽観ロック
-   - done API
-   - init via Cognito Sign Up
-   - synthetics monitor
+   - [x] Cognito 込みでテストできる画面
+   - [ ] User の createdAt と updatedAt 忘れてた
+   - [ ] テスト: status の expext を追加
+   - [ ] エラーレスポンスの統一
+   - [ ] nat 落とす
+   - [ ] Migrater の応答がエラーになっている
+   - [ ] CI/CD
+   - [ ] カバレッジ取る
+   - [ ] テストの文言
+   - [ ] テストしやすい docker compose 環境
+   - [ ] 楽観ロック
+   - [ ] done API
+   - [ ] init via Cognito Sign Up
+   - [ ] synthetics monitor
