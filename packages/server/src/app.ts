@@ -3,7 +3,7 @@ import { json } from "body-parser";
 import awsServerlessExpressMiddleware from "aws-serverless-express/middleware";
 import userGet from "./handlers/userGet";
 import userCreate from "./handlers/userCreate";
-// import tasksSearch from "./handlers/tasksSearch";
+import tasksSearch from "./handlers/tasksSearch";
 
 const app = express();
 export default app;
@@ -35,7 +35,7 @@ app.post("/user", userCreate);
 /**
  * Taskの一覧を取得する
  */
-// app.get("/board/:boardId/tasks", tasksSearch);
+app.get("/board/:boardId/tasks", tasksSearch);
 /**
  * Taskを作成する
  */

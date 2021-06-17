@@ -83,6 +83,7 @@ aws lambda invoke --function-name development-TodoApi-Migrater-Fn /dev/stdout
    - nat 落とす
    - Migrater の応答がエラーになっている
    - CI/CD
+   - テストの文言
    - テストしやすい docker compose 環境
    - 楽観ロック
    - done API
