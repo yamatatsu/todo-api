@@ -59,8 +59,8 @@ aws lambda invoke --function-name development-TodoApi-Migrater-Fn /dev/stdout
 1. architecture overview
    - [x] base of cdk
    - [x] deploy all resourse
-   - [ ] integration
-   - [ ] db migration pipline
+   - [x] integration
+   - [x] db migration pipline
 1. rest server on local
    - [x] setup prisma
      - https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch-typescript-postgres
