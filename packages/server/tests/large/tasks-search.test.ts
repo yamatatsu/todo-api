@@ -43,19 +43,21 @@ test("複数のTaskが取得できること", async () => {
 
   expect(res.body).toEqual([
     {
-      boardId: board.id,
-      createdAt: expect.any(String),
-      description: null,
       id: expect.any(Number),
+      boardId: board.id,
+      description: null,
       title: "test-task-title1",
+      finished: false,
+      createdAt: expect.any(String),
       updatedAt: expect.any(String),
     },
     {
-      boardId: board.id,
-      createdAt: expect.any(String),
-      description: null,
       id: expect.any(Number),
+      boardId: board.id,
+      description: null,
       title: "test-task-title2",
+      finished: false,
+      createdAt: expect.any(String),
       updatedAt: expect.any(String),
     },
   ]);

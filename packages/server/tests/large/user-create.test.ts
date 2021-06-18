@@ -33,6 +33,7 @@ test("ユーザーが作成できること", async () => {
             boardId: expect.any(Number),
             title: "Great Awesome Tutorial",
             description: null,
+            finished: false,
             createdAt: expect.any(String),
             updatedAt: expect.any(String),
           },

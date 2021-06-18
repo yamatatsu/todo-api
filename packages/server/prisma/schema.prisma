@@ -32,6 +32,7 @@ model Task {
   id          Int      @id @default(autoincrement())
   title       String   @db.VarChar(255)
   description String?
+  finished    Boolean  @default(false)
   boardId     Int
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

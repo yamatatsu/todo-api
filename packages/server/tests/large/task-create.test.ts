@@ -34,6 +34,7 @@ test("Taskが作成できること", async () => {
   expect(res.body).toEqual({
     id: expect.any(Number),
     ...body,
+    finished: false,
     boardId: board.id,
     createdAt: expect.any(String),
     updatedAt: expect.any(String),
