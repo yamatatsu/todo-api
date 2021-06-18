@@ -8,6 +8,7 @@ import boardCreate from "./handlers/boardCreate";
 import boardUpdate from "./handlers/boardUpdate";
 import boardDelete from "./handlers/boardDelete";
 import tasksSearch from "./handlers/tasksSearch";
+import taskCreate from "./handlers/taskCreate";
 
 const app = express();
 export default app;
@@ -55,7 +56,7 @@ app.get("/board/:boardId/tasks", tasksSearch);
 /**
  * Taskを作成する
  */
-// app.post("/board/:boardId/task", taskCreate);
+app.post("/board/:boardId/task", taskCreate);
 /**
  * Taskを更新する
  */
