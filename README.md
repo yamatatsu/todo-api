@@ -79,18 +79,22 @@ aws lambda invoke --function-name development-TodoApi-Migrater-Fn /dev/stdout
    - [ ] implimentation
    - [ ] test code
    - [ ] playbook for launching application
-1. 思いつき
+1. タスク
    - [x] Cognito 込みでテストできる画面
    - [x] User の createdAt と updatedAt 忘れてた
-   - [ ] トランザクション見直し
-   - [ ] 入力チェック見直し
-   - [ ] テスト: status の expext を追加
-   - [ ] エラーレスポンスの統一
-   - [ ] `node_modules/.prisma` の monorepo 問題の解消
+   - [ ] アーキテクチャの文書化
+   - [ ] API インターフェースの見直しと文書化
+     - [ ] 入力チェック見直し
+     - [ ] テスト: status の expext を追加
+     - [ ] エラーレスポンスの統一
+   - [ ] 実装の見直し
+     - [ ] トランザクション見直し
+     - [ ] `node_modules/.prisma` の monorepo 問題の解消
+     - [ ] カバレッジ取る
    - [ ] nat 落とす
+     - [ ] アーキテクチャ図の修正
    - [ ] Migrater の応答がエラーになっている
    - [ ] CI/CD
-   - [ ] カバレッジ取る
    - [ ] テストの文言
    - [ ] テストしやすい docker compose 環境
    - [ ] ログ設計
