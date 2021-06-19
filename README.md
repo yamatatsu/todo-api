@@ -70,6 +70,7 @@ aws lambda invoke --function-name development-TodoApi-Migrater-Fn /dev/stdout
    - [x] express on lambda
    - [ ] restful api
      - [ ] search tasks
+     - [x] the others
 1. integration
    - [x] e2e test
    - [ ] documentation
@@ -104,7 +105,7 @@ aws lambda invoke --function-name development-TodoApi-Migrater-Fn /dev/stdout
      - [ ] `node_modules/.prisma` の monorepo 問題の解消
      - [ ] カバレッジ取る
    - 機能
-     - [ ] done API
+     - [x] done API
      - [ ] 変更履歴
      - [ ] 楽観ロック
      - [ ] init via Cognito Sign Up
