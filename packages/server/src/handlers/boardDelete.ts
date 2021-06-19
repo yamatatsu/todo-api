@@ -24,15 +24,19 @@ const handler: Handler = async (req, res) => {
 
   const prisma = await getPrisma();
 
-  const result = await prisma.board.deleteMany({
+  const board = await prisma.board.findFirst({
     where: { id: paramValidationReslt.data.boardId, author: { sub } },
   });
-
-  if (result.count === 0) {
-    console.info("No boards has deleted.");
+  if (!board) {
+    console.info("No boards has found.");
     res.sendStatus(404);
     return;
   }
+
+  const [, result] = await prisma.$transaction([
+    prisma.task.deleteMany({ where: { boardId: board.id } }),
+    prisma.board.deleteMany({ where: { id: board.id } }),
+  ]);
 
   res.json(result);
 };

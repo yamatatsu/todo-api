@@ -1,38 +1,36 @@
 import request from "supertest";
 import app from "../../src/app";
-import { setupPrisma, getXApigatewayEvent } from "./helper";
+import { setupPrisma, getXApigatewayEvent, createUser1 } from "./helper";
 
 const prisma = setupPrisma();
 
 jest.retryTimes(2);
 
 test("ユーザーが更新できること", async () => {
-  const data = await prisma.user.create({
-    data: { sub: "test-sub", name: "test-name" },
-  });
+  const { user } = await createUser1(prisma);
+
   const res = await request(app)
     .put(`/user`)
-    .send({ name: "test-name-updated" })
-    .set("x-apigateway-event", getXApigatewayEvent(data.sub))
+    .send({ name: "test-user-name1:updated" })
+    .set("x-apigateway-event", getXApigatewayEvent(user.sub))
     .set("x-apigateway-context", "{}");
 
   expect(res.status).toEqual(200);
   expect(res.body).toEqual({
-    ...data,
-    name: "test-name-updated",
+    ...user,
+    name: "test-user-name1:updated",
     createdAt: expect.any(String),
     updatedAt: expect.any(String),
   });
 });
 
 test("必須チェックエラーとなること", async () => {
-  const data = await prisma.user.create({
-    data: { sub: "test-sub", name: "test-name" },
-  });
+  const { user } = await createUser1(prisma);
+
   const res = await request(app)
     .put(`/user`)
     .send({})
-    .set("x-apigateway-event", getXApigatewayEvent(data.sub))
+    .set("x-apigateway-event", getXApigatewayEvent(user.sub))
     .set("x-apigateway-context", "{}");
 
   expect(res.status).toEqual(400);
@@ -55,7 +53,7 @@ test("必須チェックエラーとなること", async () => {
 test("404　エラーとなること", async () => {
   const res = await request(app)
     .put(`/user`)
-    .send({ name: "test-name-updated" })
+    .send({ name: "test-user-name1:updated" })
     .set("x-apigateway-event", getXApigatewayEvent("dummy-sub"))
     .set("x-apigateway-context", "{}");
 

@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node -r dotenv/config -r esbuild-register src/index.local.ts",
     "watch": "nodemon --watch src/ --ext ts --exec 'yarn start'",
-    "test:large": "DATABASE_URL=mysql://tauser:password@localhost:3306/tadb jest --runInBand tests/large/",
+    "test:large": "DATABASE_URL=mysql://tauser:password@localhost:3306/tadb jest --runInBand --silent tests/large/",
     "migrate-deploy-production": "zx scripts/migrate-deploy.mjs"
   },
   "devDependencies": {

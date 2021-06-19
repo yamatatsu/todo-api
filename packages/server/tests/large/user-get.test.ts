@@ -1,22 +1,21 @@
 import request from "supertest";
 import app from "../../src/app";
-import { setupPrisma, getXApigatewayEvent } from "./helper";
+import { setupPrisma, getXApigatewayEvent, createUser1 } from "./helper";
 
 const prisma = setupPrisma();
 
 jest.retryTimes(2);
 
 test("単一のユーザーが取得できること", async () => {
-  const data = await prisma.user.create({
-    data: { sub: "test-sub", name: "test-name" },
-  });
+  const { user } = await createUser1(prisma);
+
   const res = await request(app)
     .get(`/user`)
-    .set("x-apigateway-event", getXApigatewayEvent(data.sub))
+    .set("x-apigateway-event", getXApigatewayEvent(user.sub))
     .set("x-apigateway-context", "{}");
 
   expect(res.body).toEqual({
-    ...data,
+    ...user,
     createdAt: expect.any(String),
     updatedAt: expect.any(String),
   });

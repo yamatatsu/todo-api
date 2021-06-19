@@ -78,7 +78,7 @@ aws lambda invoke --function-name development-TodoApi-Migrater-Fn /dev/stdout
    - [ ] design of architecture
    - [ ] documentation of design
    - [ ] implimentation
-   - [ ] test code
+   - [x] test code
    - [ ] playbook for launching application
 1. タスク
    - [x] Cognito 込みでテストできる画面

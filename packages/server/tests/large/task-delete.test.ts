@@ -1,34 +1,17 @@
 import request from "supertest";
 import app from "../../src/app";
-import { setupPrisma, getXApigatewayEvent } from "./helper";
+import { setupPrisma, getXApigatewayEvent, createUser1 } from "./helper";
 
 const prisma = setupPrisma();
 
 jest.retryTimes(2);
 
 test("Taskが更新できること", async () => {
-  const user = await prisma.user.create({
-    data: {
-      sub: "test-sub",
-      name: "test-name",
-      boards: {
-        create: {
-          title: "test-board-title",
-          description: "test-description-description",
-          tasks: {
-            create: {
-              title: "test-task-title",
-              description: "test-task-description",
-            },
-          },
-        },
-      },
-    },
-    include: { boards: { include: { tasks: true } } },
-  });
-
-  const board = user.boards[0];
-  const task = board.tasks[0];
+  const {
+    user,
+    board,
+    tasks: [task],
+  } = await createUser1(prisma);
 
   const res = await request(app)
     .delete(`/board/${board.id}/task/${task.id}`)
@@ -42,28 +25,10 @@ test("Taskが更新できること", async () => {
 });
 
 test("404エラーとなること", async () => {
-  const user = await prisma.user.create({
-    data: {
-      sub: "test-sub",
-      name: "test-name",
-      boards: {
-        create: {
-          title: "test-board-title",
-          description: "test-description-description",
-          tasks: {
-            create: {
-              title: "test-task-title",
-              description: "test-task-description",
-            },
-          },
-        },
-      },
-    },
-    include: { boards: { include: { tasks: true } } },
-  });
-
-  const board = user.boards[0];
-  const task = board.tasks[0];
+  const {
+    user,
+    tasks: [task],
+  } = await createUser1(prisma);
 
   const res = await request(app)
     .delete(`/board/0/task/${task.id}`)
@@ -74,28 +39,7 @@ test("404エラーとなること", async () => {
 });
 
 test("404エラーとなること", async () => {
-  const user = await prisma.user.create({
-    data: {
-      sub: "test-sub",
-      name: "test-name",
-      boards: {
-        create: {
-          title: "test-board-title",
-          description: "test-description-description",
-          tasks: {
-            create: {
-              title: "test-task-title",
-              description: "test-task-description",
-            },
-          },
-        },
-      },
-    },
-    include: { boards: { include: { tasks: true } } },
-  });
-
-  const board = user.boards[0];
-  const task = board.tasks[0];
+  const { user, board } = await createUser1(prisma);
 
   const res = await request(app)
     .delete(`/board/${board.id}/task/0`)
@@ -106,28 +50,10 @@ test("404エラーとなること", async () => {
 });
 
 test("404エラーとなること", async () => {
-  const user = await prisma.user.create({
-    data: {
-      sub: "test-sub",
-      name: "test-name",
-      boards: {
-        create: {
-          title: "test-board-title",
-          description: "test-description-description",
-          tasks: {
-            create: {
-              title: "test-task-title",
-              description: "test-task-description",
-            },
-          },
-        },
-      },
-    },
-    include: { boards: { include: { tasks: true } } },
-  });
-
-  const board = user.boards[0];
-  const task = board.tasks[0];
+  const {
+    board,
+    tasks: [task],
+  } = await createUser1(prisma);
 
   const res = await request(app)
     .delete(`/board/${board.id}/task/${task.id}`)

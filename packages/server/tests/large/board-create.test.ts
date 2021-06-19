@@ -1,15 +1,13 @@
 import request from "supertest";
 import app from "../../src/app";
-import { setupPrisma, getXApigatewayEvent } from "./helper";
+import { setupPrisma, getXApigatewayEvent, createUser1 } from "./helper";
 
 const prisma = setupPrisma();
 
 jest.retryTimes(2);
 
 test("Boardが作成できること", async () => {
-  const user = await prisma.user.create({
-    data: { sub: "test-sub", name: "test-name" },
-  });
+  const { user } = await createUser1(prisma);
 
   const body = { title: "test-title", description: "test-description" };
   const res = await request(app)
@@ -29,9 +27,7 @@ test("Boardが作成できること", async () => {
 });
 
 test("必須チェックエラーとなること", async () => {
-  const user = await prisma.user.create({
-    data: { sub: "test-sub", name: "test-name" },
-  });
+  const { user } = await createUser1(prisma);
 
   const body = { description: "test-description" };
   const res = await request(app)

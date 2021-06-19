@@ -1,27 +1,13 @@
 import request from "supertest";
 import app from "../../src/app";
-import { setupPrisma, getXApigatewayEvent } from "./helper";
+import { setupPrisma, getXApigatewayEvent, createUser1 } from "./helper";
 
 const prisma = setupPrisma();
 
 jest.retryTimes(2);
 
 test("Taskが作成できること", async () => {
-  const user = await prisma.user.create({
-    data: {
-      sub: "test-sub",
-      name: "test-name",
-      boards: {
-        create: {
-          title: "test-board-title",
-          description: "test-description-description",
-        },
-      },
-    },
-    include: { boards: true },
-  });
-
-  const board = user.boards[0];
+  const { user, board } = await createUser1(prisma);
 
   const body = { title: "test-title", description: "test-description" };
   const res = await request(app)
@@ -42,45 +28,7 @@ test("Taskが作成できること", async () => {
 });
 
 test("404エラーとなること", async () => {
-  const user = await prisma.user.create({
-    data: {
-      sub: "test-sub",
-      name: "test-name",
-      boards: {
-        create: {
-          title: "test-board-title",
-          description: "test-description-description",
-        },
-      },
-    },
-    include: { boards: true },
-  });
-
-  const board = user.boards[0];
-
-  const body = { title: "test-title", description: "test-description" };
-  const res = await request(app)
-    .post(`/board/${board.id}/task`)
-    .send(body)
-    .set("x-apigateway-event", getXApigatewayEvent("dummy-sub"))
-    .set("x-apigateway-context", "{}");
-
-  expect(res.status).toEqual(404);
-});
-
-test("404エラーとなること", async () => {
-  const user = await prisma.user.create({
-    data: {
-      sub: "test-sub",
-      name: "test-name",
-      boards: {
-        create: {
-          title: "test-board-title",
-          description: "test-description-description",
-        },
-      },
-    },
-  });
+  const { user } = await createUser1(prisma);
 
   const body = { title: "test-title", description: "test-description" };
   const res = await request(app)
@@ -93,19 +41,7 @@ test("404エラーとなること", async () => {
 });
 
 test("404エラーとなること", async () => {
-  const user = await prisma.user.create({
-    data: {
-      sub: "test-sub",
-      name: "test-name",
-      boards: {
-        create: {
-          title: "test-board-title",
-          description: "test-description-description",
-        },
-      },
-    },
-    include: { boards: true },
-  });
+  const { user } = await createUser1(prisma);
 
   const body = { title: "test-title", description: "test-description" };
   const res = await request(app)
@@ -118,21 +54,20 @@ test("404エラーとなること", async () => {
 });
 
 test("404エラーとなること", async () => {
-  const user = await prisma.user.create({
-    data: {
-      sub: "test-sub",
-      name: "test-name",
-      boards: {
-        create: {
-          title: "test-board-title",
-          description: "test-description-description",
-        },
-      },
-    },
-    include: { boards: true },
-  });
+  const { board } = await createUser1(prisma);
 
-  const board = user.boards[0];
+  const body = { title: "test-title", description: "test-description" };
+  const res = await request(app)
+    .post(`/board/${board.id}/task`)
+    .send(body)
+    .set("x-apigateway-event", getXApigatewayEvent("dummy-sub"))
+    .set("x-apigateway-context", "{}");
+
+  expect(res.status).toEqual(404);
+});
+
+test("400エラーとなること", async () => {
+  const { user, board } = await createUser1(prisma);
 
   const body = { description: "test-description" };
   const res = await request(app)
