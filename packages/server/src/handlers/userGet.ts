@@ -17,8 +17,9 @@ const handler: Handler = async (req, res) => {
 
   if (!result) {
     res.sendStatus(404);
-  } else {
-    res.json(result);
+    return;
   }
+
+  res.json(result);
 };
 export default handler;

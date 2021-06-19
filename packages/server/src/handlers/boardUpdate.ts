@@ -1,12 +1,11 @@
 import { Handler } from "express";
-import { Prisma } from "@prisma/client";
 import * as zod from "zod";
 import getPrisma from "../db";
 
 const paramSchema = zod.object({
   boardId: zod.string().regex(/^\d+$/).transform(Number),
 });
-const schema = zod.object({
+const bodyschema = zod.object({
   title: zod.string().optional(),
   description: zod.string().optional(),
 });
@@ -26,27 +25,27 @@ const handler: Handler = async (req, res) => {
     return;
   }
 
-  const _res = schema.safeParse(req.body);
-  if (!_res.success) {
-    res.status(400).json(_res.error);
+  const bodyValidationResult = bodyschema.safeParse(req.body);
+  if (!bodyValidationResult.success) {
+    res.status(400).json(bodyValidationResult.error);
     return;
   }
 
   const prisma = await getPrisma();
 
-  const result = await prisma.board.updateMany({
+  const updateResult = await prisma.board.updateMany({
     data: {
-      ..._res.data,
+      ...bodyValidationResult.data,
     },
     where: { id: paramValidationReslt.data.boardId, author: { sub } },
   });
 
-  if (result.count === 0) {
+  if (updateResult.count === 0) {
     console.info("No boards has updated.");
     res.sendStatus(404);
     return;
   }
 
-  res.json(result);
+  res.json(updateResult);
 };
 export default handler;

@@ -1,9 +1,8 @@
 import { Handler } from "express";
-import { Prisma } from "@prisma/client";
 import * as zod from "zod";
 import getPrisma from "../db";
 
-const schema = zod.object({
+const bodySchema = zod.object({
   title: zod.string(),
   description: zod.string().optional(),
 });
@@ -17,9 +16,9 @@ const handler: Handler = async (req, res) => {
     throw new Error("No sub was provided.");
   }
 
-  const _res = schema.safeParse(req.body);
-  if (!_res.success) {
-    res.status(400).json(_res.error);
+  const bodyValidationResult = bodySchema.safeParse(req.body);
+  if (!bodyValidationResult.success) {
+    res.status(400).json(bodyValidationResult.error);
     return;
   }
 
@@ -31,13 +30,13 @@ const handler: Handler = async (req, res) => {
     return;
   }
 
-  const result = await prisma.board.create({
+  const board = await prisma.board.create({
     data: {
       authorId: user.id,
-      ..._res.data,
+      ...bodyValidationResult.data,
     },
   });
 
-  res.json(result);
+  res.json(board);
 };
 export default handler;

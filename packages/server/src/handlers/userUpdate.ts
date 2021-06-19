@@ -3,7 +3,7 @@ import { Prisma } from "@prisma/client";
 import * as zod from "zod";
 import getPrisma from "../db";
 
-const schema = zod.object({ name: zod.string() });
+const bodySchema = zod.object({ name: zod.string() });
 
 const handler: Handler = async (req, res) => {
   console.info("Start " + __filename.match(/[\w-]+\.ts$/)?.[0]);
@@ -14,9 +14,9 @@ const handler: Handler = async (req, res) => {
     throw new Error("No sub was provided.");
   }
 
-  const _res = schema.safeParse(req.body);
-  if (!_res.success) {
-    res.status(400).json(_res.error);
+  const bodyValidationResult = bodySchema.safeParse(req.body);
+  if (!bodyValidationResult.success) {
+    res.status(400).json(bodyValidationResult.error);
     return;
   }
 
@@ -25,7 +25,7 @@ const handler: Handler = async (req, res) => {
   let result;
   try {
     result = await prisma.user.update({
-      data: _res.data,
+      data: bodyValidationResult.data,
       where: { sub },
     });
   } catch (error) {

@@ -1,5 +1,4 @@
 import { Handler } from "express";
-import { Prisma } from "@prisma/client";
 import * as zod from "zod";
 import getPrisma from "../db";
 
@@ -7,7 +6,7 @@ const paramSchema = zod.object({
   boardId: zod.string().regex(/^\d+$/).transform(Number),
   taskId: zod.string().regex(/^\d+$/).transform(Number),
 });
-const schema = zod.object({
+const bodySchema = zod.object({
   title: zod.string().optional(),
   description: zod.string().optional(),
 });
@@ -28,9 +27,9 @@ const handler: Handler = async (req, res) => {
     return;
   }
 
-  const _res = schema.safeParse(req.body);
-  if (!_res.success) {
-    res.status(400).json(_res.error);
+  const bodyValidationResult = bodySchema.safeParse(req.body);
+  if (!bodyValidationResult.success) {
+    res.status(400).json(bodyValidationResult.error);
     return;
   }
 
@@ -38,7 +37,7 @@ const handler: Handler = async (req, res) => {
 
   const result = await prisma.task.updateMany({
     data: {
-      ..._res.data,
+      ...bodyValidationResult.data,
     },
     where: {
       id: paramValidationReslt.data.taskId,
