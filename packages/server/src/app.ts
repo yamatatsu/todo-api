@@ -10,6 +10,7 @@ import boardDelete from "./handlers/boardDelete";
 import tasksSearch from "./handlers/tasksSearch";
 import taskCreate from "./handlers/taskCreate";
 import taskUpdate from "./handlers/taskUpdate";
+import taskDelete from "./handlers/taskDelete";
 import taskFinishedUpdate from "./handlers/taskFinishedUpdate";
 
 const app = express();
@@ -70,4 +71,4 @@ app.put("/board/:boardId/task/:taskId/finished", taskFinishedUpdate);
 /**
  * Taskを削除する
  */
-// app.delete("/board/:boardId/task/:taskId", taskDelete);
+app.delete("/board/:boardId/task/:taskId", taskDelete);
