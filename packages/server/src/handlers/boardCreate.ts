@@ -1,6 +1,7 @@
 import { Handler } from "express";
 import * as zod from "zod";
 import getPrisma from "../db";
+import { getSub } from "./lib";
 
 const bodySchema = zod.object({
   title: zod.string(),
@@ -10,11 +11,7 @@ const bodySchema = zod.object({
 const handler: Handler = async (req, res) => {
   console.info("Start " + __filename.match(/[\w-]+\.ts$/)?.[0]);
 
-  const sub = req.apiGateway?.event.requestContext.authorizer?.claims.sub;
-  if (!sub) {
-    // api gatewayを通過したのにsubが無いのはシステムエラー
-    throw new Error("No sub was provided.");
-  }
+  const sub = getSub(req);
 
   const bodyValidationResult = bodySchema.safeParse(req.body);
   if (!bodyValidationResult.success) {

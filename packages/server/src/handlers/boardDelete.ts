@@ -1,6 +1,7 @@
 import { Handler } from "express";
 import * as zod from "zod";
 import getPrisma from "../db";
+import { getSub } from "./lib";
 
 const paramSchema = zod.object({
   boardId: zod.string().regex(/^\d+$/).transform(Number),
@@ -9,11 +10,7 @@ const paramSchema = zod.object({
 const handler: Handler = async (req, res) => {
   console.info("Start " + __filename.match(/[\w-]+\.ts$/)?.[0]);
 
-  const sub = req.apiGateway?.event.requestContext.authorizer?.claims.sub;
-  if (!sub) {
-    // api gatewayを通過したのにsubが無いのはシステムエラー
-    throw new Error("No sub was provided.");
-  }
+  const sub = getSub(req);
 
   const paramValidationReslt = paramSchema.safeParse(req.params);
   if (!paramValidationReslt.success) {

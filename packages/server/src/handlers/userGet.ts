@@ -1,25 +1,22 @@
 import { Handler } from "express";
 import getPrisma from "../db";
+import { getSub } from "./lib";
 
 const handler: Handler = async (req, res) => {
   console.info("Start " + __filename.match(/[\w-]+\.ts$/)?.[0]);
 
-  const sub = req.apiGateway?.event.requestContext.authorizer?.claims.sub;
-  if (!sub) {
-    // api gatewayを通過したのにsubが無いのはシステムエラー
-    throw new Error("No sub was provided.");
-  }
+  const sub = getSub(req);
 
   const prisma = await getPrisma();
-  const result = await prisma.user.findUnique({
+
+  const user = await prisma.user.findUnique({
     where: { sub },
   });
-
-  if (!result) {
+  if (!user) {
     res.sendStatus(404);
     return;
   }
 
-  res.json(result);
+  res.json(user);
 };
 export default handler;
