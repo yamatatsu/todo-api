@@ -68,8 +68,8 @@ aws lambda invoke --function-name development-TodoApi-Migrater-Fn /dev/stdout
      - https://www.prisma.io/docs/guides/performance-and-optimization/connection-management
    - [x] setup express
    - [x] express on lambda
-   - [ ] restful api
-     - [ ] search tasks
+   - [x] restful api
+     - [x] search tasks
      - [x] the others
 1. integration
    - [x] e2e test

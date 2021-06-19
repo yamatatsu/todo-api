@@ -2,8 +2,11 @@ import { Handler } from "express";
 import * as zod from "zod";
 import getPrisma from "../db";
 
-const schema = zod.object({
+const paramSchema = zod.object({
   boardId: zod.string().regex(/^\d+$/).transform(Number),
+});
+const querySchema = zod.object({
+  keyword: zod.string().optional(),
 });
 
 const handler: Handler = async (req, res) => {
@@ -15,31 +18,46 @@ const handler: Handler = async (req, res) => {
     throw new Error("No sub was provided.");
   }
 
-  const _res = schema.safeParse(req.params);
-
-  if (!_res.success) {
+  const paramValidationReslt = paramSchema.safeParse(req.params);
+  if (!paramValidationReslt.success) {
+    console.info(`Invalid resource path has provided. path: ${req.path}`);
     res.sendStatus(404);
     return;
   }
+
+  const queryValidationReslt = querySchema.safeParse(req.query);
+  if (!queryValidationReslt.success) {
+    res.status(400).json(queryValidationReslt.error);
+    return;
+  }
+  const { keyword } = queryValidationReslt.data;
 
   const prisma = await getPrisma();
-  const result = await prisma.board.findUnique({
-    where: { id: _res.data.boardId },
-    include: { tasks: true, author: true },
+  const board = await prisma.board.findFirst({
+    where: { id: paramValidationReslt.data.boardId, author: { sub } },
   });
 
-  if (!result) {
+  if (!board) {
     res.sendStatus(404);
     return;
   }
 
-  if (result.author.sub !== sub) {
-    // 401を返す実装もあり得るが、404を返すものとする。
-    // アクセス権の持たないuserにはリソースの有無を教えない。
-    res.sendStatus(404);
-    return;
-  }
+  const searchQuery = keyword
+    ? {
+        OR: [
+          { title: { contains: keyword } },
+          { description: { contains: keyword } },
+        ],
+      }
+    : {};
 
-  res.json(result.tasks);
+  const tasks = await prisma.task.findMany({
+    where: {
+      boardId: board.id,
+      ...searchQuery,
+    },
+  });
+
+  res.json(tasks);
 };
 export default handler;
