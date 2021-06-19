@@ -13,6 +13,8 @@ const schema = zod.object({
 });
 
 const handler: Handler = async (req, res) => {
+  console.info("Start " + __filename.match(/[\w-]+\.ts$/)?.[0]);
+
   const sub = req.apiGateway?.event.requestContext.authorizer?.claims.sub;
   if (!sub) {
     // api gatewayを通過したのにsubが無いのはシステムエラー
@@ -44,7 +46,7 @@ const handler: Handler = async (req, res) => {
     },
   });
   if (result.count === 0) {
-    console.info("No tasks has deleted.");
+    console.info("No tasks has updated.");
     res.sendStatus(404);
     return;
   }

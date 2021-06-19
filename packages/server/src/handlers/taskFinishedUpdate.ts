@@ -5,10 +5,10 @@ import getPrisma from "../db";
 
 const paramSchema = zod.object({
   boardId: zod.string().regex(/^\d+$/).transform(Number),
+  taskId: zod.string().regex(/^\d+$/).transform(Number),
 });
 const schema = zod.object({
-  title: zod.string().optional(),
-  description: zod.string().optional(),
+  finished: zod.boolean(),
 });
 
 const handler: Handler = async (req, res) => {
@@ -22,6 +22,7 @@ const handler: Handler = async (req, res) => {
 
   const paramValidationReslt = paramSchema.safeParse(req.params);
   if (!paramValidationReslt.success) {
+    console.info(`Invalid resource path has provided. path: ${req.path}`);
     res.sendStatus(404);
     return;
   }
@@ -34,15 +35,17 @@ const handler: Handler = async (req, res) => {
 
   const prisma = await getPrisma();
 
-  const result = await prisma.board.updateMany({
+  const result = await prisma.task.updateMany({
     data: {
       ..._res.data,
     },
-    where: { id: paramValidationReslt.data.boardId, author: { sub } },
+    where: {
+      id: paramValidationReslt.data.taskId,
+      board: { id: paramValidationReslt.data.boardId, author: { sub } },
+    },
   });
-
   if (result.count === 0) {
-    console.info("No boards has updated.");
+    console.info("No tasks has updated.");
     res.sendStatus(404);
     return;
   }

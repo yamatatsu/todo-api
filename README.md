@@ -83,24 +83,28 @@ aws lambda invoke --function-name development-TodoApi-Migrater-Fn /dev/stdout
    - [x] Cognito 込みでテストできる画面
    - [x] User の createdAt と updatedAt 忘れてた
    - [ ] アーキテクチャの文書化
-   - [ ] API インターフェースの見直しと文書化
+   - API インターフェースの見直しと文書化
      - [ ] 入力チェック見直し
      - [ ] テスト: status の expext を追加
      - [ ] エラーレスポンスの統一
-   - [ ] 実装の見直し
+   - 実装の見直し
      - [ ] トランザクション見直し
+   - 運用
+     - [ ] ログ設計
+     - [ ] nat 落とす
+       - [ ] アーキテクチャ図の修正
+     - [ ] CI/CD
+     - [ ] lambda insight
+     - [ ] synthetics monitor
+   - 内部品質
+     - [ ] Migrater の応答がエラーになっている
+     - [ ] テストの文言
+     - [ ] テストしやすい docker compose 環境
+     - [ ] https://www.npmjs.com/package/@vendia/serverless-express
      - [ ] `node_modules/.prisma` の monorepo 問題の解消
      - [ ] カバレッジ取る
-   - [ ] nat 落とす
-     - [ ] アーキテクチャ図の修正
-   - [ ] Migrater の応答がエラーになっている
-   - [ ] CI/CD
-   - [ ] テストの文言
-   - [ ] テストしやすい docker compose 環境
-   - [ ] ログ設計
-   - [ ] lambda insight
-   - [ ] https://www.npmjs.com/package/@vendia/serverless-express
-   - [ ] 楽観ロック
-   - [ ] done API
-   - [ ] init via Cognito Sign Up
-   - [ ] synthetics monitor
+   - 機能
+     - [ ] done API
+     - [ ] 変更履歴
+     - [ ] 楽観ロック
+     - [ ] init via Cognito Sign Up

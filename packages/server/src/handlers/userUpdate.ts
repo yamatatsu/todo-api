@@ -6,6 +6,8 @@ import getPrisma from "../db";
 const schema = zod.object({ name: zod.string() });
 
 const handler: Handler = async (req, res) => {
+  console.info("Start " + __filename.match(/[\w-]+\.ts$/)?.[0]);
+
   const sub = req.apiGateway?.event.requestContext.authorizer?.claims.sub;
   if (!sub) {
     // api gatewayを通過したのにsubが無いのはシステムエラー
