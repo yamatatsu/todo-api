@@ -15,7 +15,11 @@ test("単一のユーザーが取得できること", async () => {
     .set("x-apigateway-event", getXApigatewayEvent(data.sub))
     .set("x-apigateway-context", "{}");
 
-  expect(res.body).toEqual(data);
+  expect(res.body).toEqual({
+    ...data,
+    createdAt: expect.any(String),
+    updatedAt: expect.any(String),
+  });
 });
 
 /**

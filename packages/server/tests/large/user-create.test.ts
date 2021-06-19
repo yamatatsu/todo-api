@@ -19,6 +19,8 @@ test("ユーザーが作成できること", async () => {
     id: expect.any(Number),
     ...body,
     sub,
+    createdAt: expect.any(String),
+    updatedAt: expect.any(String),
     boards: [
       {
         id: expect.any(Number),

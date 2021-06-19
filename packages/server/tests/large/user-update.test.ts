@@ -20,6 +20,8 @@ test("ユーザーが更新できること", async () => {
   expect(res.body).toEqual({
     ...data,
     name: "test-name-updated",
+    createdAt: expect.any(String),
+    updatedAt: expect.any(String),
   });
 });
 
