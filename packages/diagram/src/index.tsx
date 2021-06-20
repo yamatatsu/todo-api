@@ -39,5 +39,5 @@ PNG(
       />
     </InvizAWS>
   </Diagram>,
-  { dir: "dist" }
+  { dir: "images" }
 );
