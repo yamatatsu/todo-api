@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../../src/app";
+import createApp from "../../src/app";
 import { setupPrisma, getXApigatewayEvent, createUser1 } from "./helper";
 
 const prisma = setupPrisma();
@@ -10,7 +10,7 @@ test("Taskが作成できること", async () => {
   const { user, board } = await createUser1(prisma);
 
   const body = { title: "test-title", description: "test-description" };
-  const res = await request(app)
+  const res = await request(createApp())
     .post(`/board/${board.id}/task`)
     .send(body)
     .set("x-apigateway-event", getXApigatewayEvent(user.sub))
@@ -31,7 +31,7 @@ test("404エラーとなること", async () => {
   const { user } = await createUser1(prisma);
 
   const body = { title: "test-title", description: "test-description" };
-  const res = await request(app)
+  const res = await request(createApp())
     .post(`/board/dummy-boardId/task`)
     .send(body)
     .set("x-apigateway-event", getXApigatewayEvent(user.sub))
@@ -44,7 +44,7 @@ test("404エラーとなること", async () => {
   const { user } = await createUser1(prisma);
 
   const body = { title: "test-title", description: "test-description" };
-  const res = await request(app)
+  const res = await request(createApp())
     .post(`/board/0/task`)
     .send(body)
     .set("x-apigateway-event", getXApigatewayEvent(user.sub))
@@ -57,7 +57,7 @@ test("404エラーとなること", async () => {
   const { board } = await createUser1(prisma);
 
   const body = { title: "test-title", description: "test-description" };
-  const res = await request(app)
+  const res = await request(createApp())
     .post(`/board/${board.id}/task`)
     .send(body)
     .set("x-apigateway-event", getXApigatewayEvent("dummy-sub"))
@@ -70,7 +70,7 @@ test("400エラーとなること", async () => {
   const { user, board } = await createUser1(prisma);
 
   const body = { description: "test-description" };
-  const res = await request(app)
+  const res = await request(createApp())
     .post(`/board/${board.id}/task`)
     .send(body)
     .set("x-apigateway-event", getXApigatewayEvent(user.sub))

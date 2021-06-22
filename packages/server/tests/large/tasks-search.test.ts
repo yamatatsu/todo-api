@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../../src/app";
+import createApp from "../../src/app";
 import { createUser1, getXApigatewayEvent, setupPrisma } from "./helper";
 
 const prisma = setupPrisma();
@@ -17,7 +17,7 @@ test("keywordを指定しない場合、boardのすべてのTaskが取得でき�
     include: { tasks: true },
   });
 
-  const res = await request(app)
+  const res = await request(createApp())
     .get(`/board/${board.id}/tasks`)
     .set("x-apigateway-event", getXApigatewayEvent(user.sub))
     .set("x-apigateway-context", "{}");
@@ -63,7 +63,7 @@ test("keywordが空文字の場合、boardのすべてのTaskが取得できる�
     include: { tasks: true },
   });
 
-  const res = await request(app)
+  const res = await request(createApp())
     .get(`/board/${board.id}/tasks`)
     .send({ keyword: "" })
     .set("x-apigateway-event", getXApigatewayEvent(user.sub))
@@ -110,7 +110,7 @@ test("keywordが含まれるTaskが取得できること", async () => {
     include: { tasks: true },
   });
 
-  const res = await request(app)
+  const res = await request(createApp())
     .get(`/board/${board.id}/tasks`)
     .send({ keyword: "いちご" })
     .set("x-apigateway-event", getXApigatewayEvent(user.sub))
@@ -143,7 +143,7 @@ test("keywordが含まれるTaskが取得できること", async () => {
 test("404　エラーとなること", async () => {
   const { user } = await createUser1(prisma);
 
-  const res = await request(app)
+  const res = await request(createApp())
     .get(`/board/0/tasks`)
     .set("x-apigateway-event", getXApigatewayEvent(user.sub))
     .set("x-apigateway-context", "{}");
@@ -171,7 +171,7 @@ test("404　エラーとなること", async () => {
     include: { boards: { include: { tasks: true } } },
   });
 
-  const res = await request(app)
+  const res = await request(createApp())
     .get(`/board/${data.boards[0].id}/tasks`)
     .set("x-apigateway-event", getXApigatewayEvent("dummy-sub"))
     .set("x-apigateway-context", "{}");

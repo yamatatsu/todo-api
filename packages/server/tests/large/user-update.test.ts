@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../../src/app";
+import createApp from "../../src/app";
 import { setupPrisma, getXApigatewayEvent, createUser1 } from "./helper";
 
 const prisma = setupPrisma();
@@ -9,7 +9,7 @@ jest.retryTimes(2);
 test("ユーザーが更新できること", async () => {
   const { user } = await createUser1(prisma);
 
-  const res = await request(app)
+  const res = await request(createApp())
     .put(`/user`)
     .send({ name: "test-user-name1:updated" })
     .set("x-apigateway-event", getXApigatewayEvent(user.sub))
@@ -27,7 +27,7 @@ test("ユーザーが更新できること", async () => {
 test("必須チェックエラーとなること", async () => {
   const { user } = await createUser1(prisma);
 
-  const res = await request(app)
+  const res = await request(createApp())
     .put(`/user`)
     .send({})
     .set("x-apigateway-event", getXApigatewayEvent(user.sub))
@@ -51,7 +51,7 @@ test("必須チェックエラーとなること", async () => {
  * cognito userは作成したがまだuser createしていない状態で Get user を呼び出した場合
  */
 test("404　エラーとなること", async () => {
-  const res = await request(app)
+  const res = await request(createApp())
     .put(`/user`)
     .send({ name: "test-user-name1:updated" })
     .set("x-apigateway-event", getXApigatewayEvent("dummy-sub"))

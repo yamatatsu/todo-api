@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../../src/app";
+import createApp from "../../src/app";
 import { setupPrisma, getXApigatewayEvent } from "./helper";
 
 const prisma = setupPrisma();
@@ -9,7 +9,7 @@ jest.retryTimes(2);
 test("ユーザーが作成できること", async () => {
   const body = { name: "test-name" };
   const sub = "test-sub";
-  const res = await request(app)
+  const res = await request(createApp())
     .post("/user")
     .send(body)
     .set("x-apigateway-event", getXApigatewayEvent(sub))
@@ -47,7 +47,7 @@ test("ユーザーが作成できること", async () => {
 
 test("必須チェックエラーとなること", async () => {
   const body = {};
-  const res = await request(app)
+  const res = await request(createApp())
     .post("/user")
     .send(body)
     .set("x-apigateway-event", getXApigatewayEvent("test-sub"))
@@ -71,7 +71,7 @@ test("Unique制約エラーとなること", async () => {
     data: { sub: "test-sub", name: "test-name" },
   });
 
-  const res = await request(app)
+  const res = await request(createApp())
     .post("/user")
     .send({ name: "test-name2" })
     .set("x-apigateway-event", getXApigatewayEvent(data.sub))

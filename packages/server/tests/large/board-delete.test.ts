@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../../src/app";
+import createApp from "../../src/app";
 import { setupPrisma, getXApigatewayEvent, createUser1 } from "./helper";
 
 const prisma = setupPrisma();
@@ -9,7 +9,7 @@ jest.retryTimes(2);
 test("Boardが削除できること", async () => {
   const { user, board } = await createUser1(prisma);
 
-  const res = await request(app)
+  const res = await request(createApp())
     .delete(`/board/${board.id}`)
     .set("x-apigateway-event", getXApigatewayEvent(user.sub))
     .set("x-apigateway-context", "{}");
@@ -23,7 +23,7 @@ test("Boardが削除できること", async () => {
 test("404エラーとなること", async () => {
   const { user } = await createUser1(prisma);
 
-  const res = await request(app)
+  const res = await request(createApp())
     .delete(`/board/dummy-boardId`)
     .set("x-apigateway-event", getXApigatewayEvent(user.sub))
     .set("x-apigateway-context", "{}");
@@ -34,7 +34,7 @@ test("404エラーとなること", async () => {
 test("404エラーとなること", async () => {
   const { board } = await createUser1(prisma);
 
-  const res = await request(app)
+  const res = await request(createApp())
     .delete(`/board/${board.id}`)
     .set("x-apigateway-event", getXApigatewayEvent("dummy-sub"))
     .set("x-apigateway-context", "{}");

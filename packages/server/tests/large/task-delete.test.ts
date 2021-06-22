@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../../src/app";
+import createApp from "../../src/app";
 import { setupPrisma, getXApigatewayEvent, createUser1 } from "./helper";
 
 const prisma = setupPrisma();
@@ -13,7 +13,7 @@ test("Taskが更新できること", async () => {
     tasks: [task],
   } = await createUser1(prisma);
 
-  const res = await request(app)
+  const res = await request(createApp())
     .delete(`/board/${board.id}/task/${task.id}`)
     .set("x-apigateway-event", getXApigatewayEvent(user.sub))
     .set("x-apigateway-context", "{}");
@@ -30,7 +30,7 @@ test("404エラーとなること", async () => {
     tasks: [task],
   } = await createUser1(prisma);
 
-  const res = await request(app)
+  const res = await request(createApp())
     .delete(`/board/0/task/${task.id}`)
     .set("x-apigateway-event", getXApigatewayEvent(user.sub))
     .set("x-apigateway-context", "{}");
@@ -41,7 +41,7 @@ test("404エラーとなること", async () => {
 test("404エラーとなること", async () => {
   const { user, board } = await createUser1(prisma);
 
-  const res = await request(app)
+  const res = await request(createApp())
     .delete(`/board/${board.id}/task/0`)
     .set("x-apigateway-event", getXApigatewayEvent(user.sub))
     .set("x-apigateway-context", "{}");
@@ -55,7 +55,7 @@ test("404エラーとなること", async () => {
     tasks: [task],
   } = await createUser1(prisma);
 
-  const res = await request(app)
+  const res = await request(createApp())
     .delete(`/board/${board.id}/task/${task.id}`)
     .set("x-apigateway-event", getXApigatewayEvent("dummy-sub"))
     .set("x-apigateway-context", "{}");

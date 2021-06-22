@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../../src/app";
+import createApp from "../../src/app";
 import { setupPrisma, getXApigatewayEvent, createUser1 } from "./helper";
 
 const prisma = setupPrisma();
@@ -10,7 +10,7 @@ test("Boardが作成できること", async () => {
   const { user } = await createUser1(prisma);
 
   const body = { title: "test-title", description: "test-description" };
-  const res = await request(app)
+  const res = await request(createApp())
     .post("/board")
     .send(body)
     .set("x-apigateway-event", getXApigatewayEvent(user.sub))
@@ -30,7 +30,7 @@ test("必須チェックエラーとなること", async () => {
   const { user } = await createUser1(prisma);
 
   const body = { description: "test-description" };
-  const res = await request(app)
+  const res = await request(createApp())
     .post("/board")
     .send(body)
     .set("x-apigateway-event", getXApigatewayEvent(user.sub))
@@ -52,7 +52,7 @@ test("必須チェックエラーとなること", async () => {
 
 test("404エラーとなること", async () => {
   const body = { title: "test-title", description: "test-description" };
-  const res = await request(app)
+  const res = await request(createApp())
     .post("/board")
     .send(body)
     .set("x-apigateway-event", getXApigatewayEvent("dummy-sub"))

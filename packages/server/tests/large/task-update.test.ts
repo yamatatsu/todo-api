@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../../src/app";
+import createApp from "../../src/app";
 import { setupPrisma, getXApigatewayEvent, createUser1 } from "./helper";
 
 const prisma = setupPrisma();
@@ -17,7 +17,7 @@ test("Taskが更新できること", async () => {
     title: "test-task-title:updated",
     description: "test-task-description:updated",
   };
-  const res = await request(app)
+  const res = await request(createApp())
     .put(`/board/${board.id}/task/${task.id}`)
     .send(body)
     .set("x-apigateway-event", getXApigatewayEvent(user.sub))
@@ -39,7 +39,7 @@ test("404エラーとなること", async () => {
     title: "test-task-title:updated",
     description: "test-task-description:updated",
   };
-  const res = await request(app)
+  const res = await request(createApp())
     .put(`/board/0/task/${task.id}`)
     .send(body)
     .set("x-apigateway-event", getXApigatewayEvent(user.sub))
@@ -55,7 +55,7 @@ test("404エラーとなること", async () => {
     title: "test-task-title:updated",
     description: "test-task-description:updated",
   };
-  const res = await request(app)
+  const res = await request(createApp())
     .put(`/board/${board.id}/task/0`)
     .send(body)
     .set("x-apigateway-event", getXApigatewayEvent(user.sub))
@@ -74,7 +74,7 @@ test("404エラーとなること", async () => {
     title: "test-task-title:updated",
     description: "test-task-description:updated",
   };
-  const res = await request(app)
+  const res = await request(createApp())
     .put(`/board/${board.id}/task/${task.id}`)
     .send(body)
     .set("x-apigateway-event", getXApigatewayEvent("dummy-sub"))
@@ -94,7 +94,7 @@ test("400エラーとなること", async () => {
     title: 1,
     description: "test-task-description:updated",
   };
-  const res = await request(app)
+  const res = await request(createApp())
     .put(`/board/${board.id}/task/${task.id}`)
     .send(body)
     .set("x-apigateway-event", getXApigatewayEvent(user.sub))
