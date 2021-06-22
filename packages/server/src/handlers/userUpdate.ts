@@ -19,22 +19,17 @@ const handler: Handler = async (req, res) => {
 
   const prisma = await getPrisma();
 
-  let result;
-  try {
-    result = await prisma.user.update({
-      data: bodyValidationResult.data,
-      where: { sub },
-    });
-  } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === "P2025") {
-        res.sendStatus(404);
-        return;
-      }
-    }
-    throw error;
+  const updateResult = await prisma.user.updateMany({
+    data: bodyValidationResult.data,
+    where: { sub },
+  });
+
+  if (updateResult.count === 0) {
+    console.info("No users has updated.");
+    res.sendStatus(404);
+    return;
   }
 
-  res.json(result);
+  res.json(updateResult);
 };
 export default handler;
