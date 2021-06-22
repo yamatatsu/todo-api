@@ -34,6 +34,6 @@ const handler: Handler = async (req, res) => {
     },
   });
 
-  res.json(board);
+  res.json({ count: 1 });
 };
 export default handler;

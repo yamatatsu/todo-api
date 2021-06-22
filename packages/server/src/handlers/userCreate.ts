@@ -46,6 +46,6 @@ const handler: Handler = async (req, res) => {
     throw error;
   }
 
-  res.json(result);
+  res.json({ count: 1 });
 };
 export default handler;

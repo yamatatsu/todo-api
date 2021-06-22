@@ -45,6 +45,6 @@ const handler: Handler = async (req, res) => {
     },
   });
 
-  res.json(task);
+  res.json({ count: 1 });
 };
 export default handler;

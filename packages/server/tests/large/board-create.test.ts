@@ -17,13 +17,7 @@ test("Boardが作成できること", async () => {
     .set("x-apigateway-context", "{}");
 
   expect(res.status).toEqual(200);
-  expect(res.body).toEqual({
-    id: expect.any(Number),
-    authorId: user.id,
-    ...body,
-    createdAt: expect.any(String),
-    updatedAt: expect.any(String),
-  });
+  expect(res.body).toEqual({ count: 1 });
 });
 
 test("必須チェックエラーとなること", async () => {

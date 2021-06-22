@@ -15,34 +15,7 @@ test("ユーザーが作成できること", async () => {
     .set("x-apigateway-event", getXApigatewayEvent(sub))
     .set("x-apigateway-context", "{}");
 
-  expect(res.body).toEqual({
-    id: expect.any(Number),
-    ...body,
-    sub,
-    createdAt: expect.any(String),
-    updatedAt: expect.any(String),
-    boards: [
-      {
-        id: expect.any(Number),
-        authorId: expect.any(Number),
-        title: "Default",
-        description: null,
-        createdAt: expect.any(String),
-        updatedAt: expect.any(String),
-        tasks: [
-          {
-            id: expect.any(Number),
-            boardId: expect.any(Number),
-            title: "Great Awesome Tutorial",
-            description: null,
-            finished: false,
-            createdAt: expect.any(String),
-            updatedAt: expect.any(String),
-          },
-        ],
-      },
-    ],
-  });
+  expect(res.body).toEqual({ count: 1 });
 });
 
 test("必須チェックエラーとなること", async () => {
