@@ -1,58 +1,28 @@
 # todo-api
 
-## setup
+## 各種手順
 
-### setup mysql
+- [ローカル環境のセットアップ](./docs/setup-local.md)
+- [AWS 環境のセットアップ](./docs/setup-infrastructure.md)
+- [アプリケーションのデプロイ](./docs/deploy.md)
 
-- install mysql
-- create user
-- create database
-- permit user to access database
+## 設計
 
-### yarn install
+### API 仕様書
 
-```sh
-yarn
-```
+[API 仕様書](./docs/api.md)
 
-### .env file
+### ER 図
 
-```sh
-cp packages/server/.env.example packages/server/.env
-```
+TBD
 
-fix `DATABASE_URL=""` in packages/server/.env as following:
-https://www.prisma.io/docs/concepts/database-connectors/mysql#connection-url
+### CRUD
 
-### prisma migrate
+TBD
 
-```sh
-cd packages/server
-yarn prisma migrate
-```
+### 構成図
 
-### start server
-
-```sh
-cd packages/server
-yarn start
-```
-
-## deploying
-
-```sh
-yarn
-cd packages/cdk
-yarn cdk deploy --all
-```
-
-## db migration
-
-適切な IAM 権限を持って以下を実行する
-
-```sh
-aws lambda invoke --function-name development-TodoApi-Migrater-Fn /dev/stdout
-```
+![構成図](./packages/diagram/images/index.png)
 
 ## load map
 
@@ -73,17 +43,17 @@ aws lambda invoke --function-name development-TodoApi-Migrater-Fn /dev/stdout
      - [x] the others
 1. integration
    - [x] e2e test
-   - [ ] documentation
+   - [x] documentation
 1. definition of done
-   - [ ] design of architecture
-   - [ ] documentation of design
-   - [ ] implimentation
+   - [x] design of architecture
+   - [x] documentation of design
+   - [x] implimentation
    - [x] test code
    - [ ] playbook for launching application
 1. タスク
    - [x] Cognito 込みでテストできる画面
    - [x] User の createdAt と updatedAt 忘れてた
-   - [ ] アーキテクチャの文書化
+   - [x] アーキテクチャの文書化
    - API インターフェースの見直しと文書化
      - [ ] 入力チェック見直し
      - [ ] テスト: status の expext を追加
@@ -93,7 +63,6 @@ aws lambda invoke --function-name development-TodoApi-Migrater-Fn /dev/stdout
    - 運用
      - [ ] ログ設計
      - [ ] nat 落とす
-       - [ ] アーキテクチャ図の修正
      - [ ] CI/CD
      - [ ] lambda insight
      - [ ] synthetics monitor
