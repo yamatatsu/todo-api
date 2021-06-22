@@ -11,6 +11,7 @@ const handler: Handler = async (req, res) => {
 
   const user = await prisma.user.findUnique({
     where: { sub },
+    include: { boards: true },
   });
   if (!user) {
     res.sendStatus(404);
