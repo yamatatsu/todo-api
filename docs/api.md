@@ -2,11 +2,11 @@
 
 ## 共通
 
-### api url base
+### apiUrlBase
 
 API Gateway の Stage のデフォルトに従ってください。
 
-### 認証ヘッダー
+### jwtToken
 
 認証のために cognito から払い出された JWT token を header に付与する必要があります。
 
@@ -21,7 +21,7 @@ x-ta-token:${jwt_token}
 ### Request Example
 
 ```bash
-curl -H "Content-Type: application/json" -H "x-ta-token:${token}" "${apiUrlBase}/user"
+curl -H "Content-Type: application/json" -H "x-ta-token:${jwtToken}" "${apiUrlBase}/user"
 ```
 
 ### Response Example
@@ -59,7 +59,7 @@ curl -H "Content-Type: application/json" -H "x-ta-token:${token}" "${apiUrlBase}
 ### Request Example
 
 ```bash
-curl -H "Content-Type: application/json" -H "x-ta-token:${token}" -X POST -d '{"name":"${name}"}' "${apiUrlBase}/user"
+curl -H "Content-Type: application/json" -H "x-ta-token:${jwtToken}" -X POST -d '{"name":"${name}"}' "${apiUrlBase}/user"
 ```
 
 ### Response Example
@@ -81,7 +81,7 @@ curl -H "Content-Type: application/json" -H "x-ta-token:${token}" -X POST -d '{"
 ### Request Example
 
 ```bash
-curl -H "Content-Type: application/json" -H "x-ta-token:${token}" -X PUT -d '{"name":"${name}"}' "${apiUrlBase}/user"
+curl -H "Content-Type: application/json" -H "x-ta-token:${jwtToken}" -X PUT -d '{"name":"${name}"}' "${apiUrlBase}/user"
 ```
 
 ### Response Example
@@ -104,7 +104,7 @@ Board を作成する。
 ### Request Example
 
 ```bash
-curl -H "Content-Type: application/json" -H "x-ta-token:${token}" -X POST -d '{"title":"test-title","description":"test-description"}' "${apiUrlBase}/board"
+curl -H "Content-Type: application/json" -H "x-ta-token:${jwtToken}" -X POST -d '{"title":"${title}","description":"${description}"}' "${apiUrlBase}/board"
 ```
 
 ### Response Example
@@ -127,7 +127,7 @@ Board を更新する。
 ### Request Example
 
 ```bash
-curl -H "Content-Type: application/json" -H "x-ta-token:${token}" -X PUT -d '{"title":"test-title","description":"test-description"}' "${apiUrlBase}/board/${boardId}"
+curl -H "Content-Type: application/json" -H "x-ta-token:${jwtToken}" -X PUT -d '{"title":"${title}","description":"${description}"}' "${apiUrlBase}/board/${boardId}"
 ```
 
 ### Response Example
@@ -143,7 +143,7 @@ Board を削除する。
 ### Request Example
 
 ```bash
-curl -H "Content-Type: application/json" -H "x-ta-token:${token}" -X DELETE "${apiUrlBase}/board/${boardId}"
+curl -H "Content-Type: application/json" -H "x-ta-token:${jwtToken}" -X DELETE "${apiUrlBase}/board/${boardId}"
 ```
 
 ### Response Example
@@ -165,7 +165,7 @@ Task の一覧を取得する
 ### Request Example
 
 ```bash
-curl -H "Content-Type: application/json" -H "x-ta-token:${token}" -X GET "${apiUrlBase}/board/${boardId}/tasks?keyword=${keyword}"
+curl -H "Content-Type: application/json" -H "x-ta-token:${jwtToken}" -X GET "${apiUrlBase}/board/${boardId}/tasks?keyword=${keyword}"
 ```
 
 ### Response Example
@@ -198,7 +198,7 @@ Task を作成する
 ### Request Example
 
 ```bash
-curl -H "Content-Type: application/json" -H "x-ta-token:${token}" -X POST -d '{"title":"test-title","description":"test-description"}' "${apiUrlBase}/board/${boardId}/task"
+curl -H "Content-Type: application/json" -H "x-ta-token:${jwtToken}" -X POST -d '{"title":"${title}","description":"${description}"}' "${apiUrlBase}/board/${boardId}/task"
 ```
 
 ### Response Example
@@ -221,7 +221,7 @@ Task を更新する
 ### Request Example
 
 ```bash
-curl -H "Content-Type: application/json" -H "x-ta-token:${token}" -X PUT -d '{"title":"test-title","description":"test-description"}' "${apiUrlBase}/board/${boardId}/task/${taskId}"
+curl -H "Content-Type: application/json" -H "x-ta-token:${jwtToken}" -X PUT -d '{"title":"${title}","description":"${description}"}' "${apiUrlBase}/board/${boardId}/task/${taskId}"
 ```
 
 ### Response Example
@@ -233,7 +233,7 @@ Task を削除する
 ### Request Example
 
 ```bash
-curl -H "Content-Type: application/json" -H "x-ta-token:${token}" -X DELETE "${apiUrlBase}/board/${boardId}/task/${taskId}"
+curl -H "Content-Type: application/json" -H "x-ta-token:${jwtToken}" -X DELETE "${apiUrlBase}/board/${boardId}/task/${taskId}"
 ```
 
 ### Response Example
@@ -255,7 +255,7 @@ Task を完了する
 ### Request Example
 
 ```bash
-curl -H "Content-Type: application/json" -H "x-ta-token:${token}" -X PUT -d '{"finished":true}' "${apiUrlBase}/board/${boardId}/task/${taskId}/finished"
+curl -H "Content-Type: application/json" -H "x-ta-token:${jwtToken}" -X PUT -d '{"finished":${finished}}' "${apiUrlBase}/board/${boardId}/task/${taskId}/finished"
 ```
 
 ### Response Example
