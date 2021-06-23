@@ -49,7 +49,7 @@ TBD
    - [x] documentation of design
    - [x] implimentation
    - [x] test code
-   - [ ] playbook for launching application
+   - [x] playbook for launching application
 1. タスク
    - [x] Cognito 込みでテストできる画面
    - [x] User の createdAt と updatedAt 忘れてた
