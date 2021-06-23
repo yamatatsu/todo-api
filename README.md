@@ -54,6 +54,8 @@ TBD
    - [x] Cognito 込みでテストできる画面
    - [x] User の createdAt と updatedAt 忘れてた
    - [x] アーキテクチャの文書化
+   - [x] simulator の整備
+   - [x] インフラ構築動作確認の手順
    - API インターフェースの見直しと文書化
      - [ ] 入力チェック見直し
      - [ ] テスト: status の expext を追加
