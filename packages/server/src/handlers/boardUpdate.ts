@@ -1,11 +1,8 @@
 import { Handler } from "express";
 import * as zod from "zod";
 import getPrisma from "../db";
-import { getSub } from "./lib";
+import { getSub, getBoardParams } from "./lib";
 
-const paramSchema = zod.object({
-  boardId: zod.string().regex(/^\d+$/).transform(Number),
-});
 const bodyschema = zod.object({
   title: zod.string().optional(),
   description: zod.string().optional(),
@@ -15,9 +12,9 @@ const handler: Handler = async (req, res) => {
   console.info("Start " + __filename.match(/[\w-]+\.ts$/)?.[0]);
 
   const sub = getSub(req);
+  const params = getBoardParams(req);
 
-  const paramValidationReslt = paramSchema.safeParse(req.params);
-  if (!paramValidationReslt.success) {
+  if (!params) {
     res.sendStatus(404);
     return;
   }
@@ -34,7 +31,7 @@ const handler: Handler = async (req, res) => {
     data: {
       ...bodyValidationResult.data,
     },
-    where: { id: paramValidationReslt.data.boardId, author: { sub } },
+    where: { id: params.boardId, author: { sub } },
   });
 
   if (updateResult.count === 0) {
