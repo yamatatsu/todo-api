@@ -1,5 +1,4 @@
 import { Handler } from "express";
-import { Prisma } from "@prisma/client";
 import * as zod from "zod";
 import getPrisma from "../db";
 import { getSub } from "./lib";
