@@ -56,7 +56,7 @@ TBD
    - [x] アーキテクチャの文書化
    - [x] simulator の整備
    - [x] インフラ構築動作確認の手順
-   - [ ] [setup-local](./docs/setup-local.md)が多分足りてない。やってみる。
+   - [x] [setup-local](./docs/setup-local.md)が多分足りてない。やってみる。
    - API インターフェースの見直しと文書化
      - [ ] 入力チェック見直し
        - 最大文字数

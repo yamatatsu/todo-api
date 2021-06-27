@@ -1,43 +1,33 @@
 import { Handler } from "express";
-import * as zod from "zod";
 import getPrisma from "../db";
-import { getSub } from "./lib";
-
-const paramSchema = zod.object({
-  boardId: zod.string().regex(/^\d+$/).transform(Number),
-  taskId: zod.string().regex(/^\d+$/).transform(Number),
-});
-const bodySchema = zod.object({
-  finished: zod.boolean(),
-});
+import { getSub, getTaskParams } from "./lib";
+import { schemaForFinished } from "../models/task";
 
 const handler: Handler = async (req, res) => {
   console.info("Start " + __filename.match(/[\w-]+\.ts$/)?.[0]);
 
   const sub = getSub(req);
+  const params = getTaskParams(req);
 
-  const paramValidationReslt = paramSchema.safeParse(req.params);
-  if (!paramValidationReslt.success) {
+  if (!params) {
     console.info(`Invalid resource path has provided. path: ${req.path}`);
     res.sendStatus(404);
     return;
   }
 
-  const bodyValidationResult = bodySchema.safeParse(req.body);
-  if (!bodyValidationResult.success) {
-    res.status(400).json(bodyValidationResult.error);
+  const validationResult = schemaForFinished.safeParse(req.body);
+  if (!validationResult.success) {
+    res.status(400).json(validationResult.error);
     return;
   }
 
   const prisma = await getPrisma();
 
   const result = await prisma.task.updateMany({
-    data: {
-      ...bodyValidationResult.data,
-    },
+    data: validationResult.data,
     where: {
-      id: paramValidationReslt.data.taskId,
-      board: { id: paramValidationReslt.data.boardId, author: { sub } },
+      id: params.taskId,
+      board: { id: params.boardId, author: { sub } },
     },
   });
   if (result.count === 0) {
