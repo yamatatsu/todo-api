@@ -1,19 +1,17 @@
 import { Handler } from "express";
 import { Prisma } from "@prisma/client";
-import * as zod from "zod";
 import getPrisma from "../db";
 import { getSub } from "./lib";
-
-const bodySchema = zod.object({ name: zod.string() });
+import { schemaForCreate } from "../models/user";
 
 const handler: Handler = async (req, res) => {
   console.info("Start " + __filename.match(/[\w-]+\.ts$/)?.[0]);
 
   const sub = getSub(req);
 
-  const bodyValidationResult = bodySchema.safeParse(req.body);
-  if (!bodyValidationResult.success) {
-    res.status(400).json(bodyValidationResult.error);
+  const validationResult = schemaForCreate.safeParse({ ...req.body, sub });
+  if (!validationResult.success) {
+    res.status(400).json(validationResult.error);
     return;
   }
 
@@ -23,7 +21,7 @@ const handler: Handler = async (req, res) => {
   try {
     result = await prisma.user.create({
       data: {
-        ...bodyValidationResult.data,
+        ...validationResult.data,
         sub,
         boards: {
           create: {

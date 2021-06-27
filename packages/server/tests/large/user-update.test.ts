@@ -19,7 +19,7 @@ test("ユーザーが更新できること", async () => {
   expect(res.body).toEqual({ count: 1 });
 });
 
-test("必須チェックエラーとなること", async () => {
+test("更新されずに正常を返すこと", async () => {
   const { user } = await createUser1(prisma);
 
   const res = await request(createApp())
@@ -28,18 +28,8 @@ test("必須チェックエラーとなること", async () => {
     .set("x-apigateway-event", getXApigatewayEvent(user.sub))
     .set("x-apigateway-context", "{}");
 
-  expect(res.status).toEqual(400);
-  expect(res.body).toEqual({
-    issues: [
-      {
-        code: "invalid_type",
-        expected: "string",
-        message: "Required",
-        path: ["name"],
-        received: "undefined",
-      },
-    ],
-  });
+  expect(res.status).toEqual(200);
+  expect(res.body).toEqual({ count: 1 });
 });
 
 /**

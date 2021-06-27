@@ -1,25 +1,23 @@
 import { Handler } from "express";
-import * as zod from "zod";
 import getPrisma from "../db";
 import { getSub } from "./lib";
-
-const bodySchema = zod.object({ name: zod.string() });
+import { schemaForUpdate } from "../models/user";
 
 const handler: Handler = async (req, res) => {
   console.info("Start " + __filename.match(/[\w-]+\.ts$/)?.[0]);
 
   const sub = getSub(req);
 
-  const bodyValidationResult = bodySchema.safeParse(req.body);
-  if (!bodyValidationResult.success) {
-    res.status(400).json(bodyValidationResult.error);
+  const validationResult = schemaForUpdate.safeParse(req.body);
+  if (!validationResult.success) {
+    res.status(400).json(validationResult.error);
     return;
   }
 
   const prisma = await getPrisma();
 
   const updateResult = await prisma.user.updateMany({
-    data: bodyValidationResult.data,
+    data: validationResult.data,
     where: { sub },
   });
 

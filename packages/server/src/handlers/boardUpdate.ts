@@ -1,12 +1,7 @@
 import { Handler } from "express";
-import * as zod from "zod";
 import getPrisma from "../db";
 import { getSub, getBoardParams } from "./lib";
-
-const bodyschema = zod.object({
-  title: zod.string().optional(),
-  description: zod.string().optional(),
-});
+import { schemaForUpdate } from "../models/board";
 
 const handler: Handler = async (req, res) => {
   console.info("Start " + __filename.match(/[\w-]+\.ts$/)?.[0]);
@@ -19,9 +14,9 @@ const handler: Handler = async (req, res) => {
     return;
   }
 
-  const bodyValidationResult = bodyschema.safeParse(req.body);
-  if (!bodyValidationResult.success) {
-    res.status(400).json(bodyValidationResult.error);
+  const validationResult = schemaForUpdate.safeParse(req.body);
+  if (!validationResult.success) {
+    res.status(400).json(validationResult.error);
     return;
   }
 
@@ -29,7 +24,7 @@ const handler: Handler = async (req, res) => {
 
   const updateResult = await prisma.board.updateMany({
     data: {
-      ...bodyValidationResult.data,
+      ...validationResult.data,
     },
     where: { id: params.boardId, author: { sub } },
   });
