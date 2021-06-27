@@ -29,7 +29,13 @@ cd packages/server
 yarn prisma migrate deploy
 ```
 
-## 4. start server
+### 4. prisma generate
+
+```sh
+yarn prisma generate
+```
+
+## 5. start server
 
 ```sh
 cd packages/server
