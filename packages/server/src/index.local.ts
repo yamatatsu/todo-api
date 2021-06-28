@@ -6,10 +6,10 @@ const port = 3000;
 const app = express();
 
 app.use((req, res, next) => {
-  req.apiGateway = {
-    // @ts-ignore
-    event: { requestContext: { authorizer: { claims: { sub: "test-sub" } } } },
-  };
+  req.headers["x-apigateway-event"] = JSON.stringify({
+    requestContext: { authorizer: { claims: { sub: "test-sub" } } },
+  });
+  req.headers["x-apigateway-context"] = "{}";
   next();
 });
 
