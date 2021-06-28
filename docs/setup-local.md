@@ -2,8 +2,11 @@
 
 ## 0. 準備
 
-- mysql が起動している。
-- mysql にデータベースとユーザーが作成されている。
+mysql を起動する。
+
+```sh
+docker run -d --name mariadb-server -e MARIADB_RANDOM_ROOT_PASSWORD=yes -e MYSQL_DATABASE=tadb -e MARIADB_USER=tauser -e MARIADB_PASSWORD=password -p 3306:3306 mariadb mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+```
 
 ## 1. yarn install
 
@@ -18,9 +21,6 @@ yarn
 ```sh
 cp packages/server/.env.example packages/server/.env
 ```
-
-以下の URL を参考に、 `DATABASE_URL=""` を設定する。
-https://www.prisma.io/docs/concepts/database-connectors/mysql#connection-url
 
 ## 3. prisma migrate
 
