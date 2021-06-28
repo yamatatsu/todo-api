@@ -77,10 +77,8 @@ TBD
    - 内部品質
      - [ ] Migrater の応答がエラーになっている
      - [ ] テストの文言
-     - [ ] テストしやすい docker compose 環境
-     - [ ] https://www.npmjs.com/package/@vendia/serverless-express
-     - [ ] `node_modules/.prisma` の monorepo 問題の解消
-     - [ ] カバレッジ取る
+     - [x] テストしやすい docker compose 環境
+     - [x] カバレッジ取る
      - [ ] use https://middy.js.org/
    - 機能
      - [x] done API
