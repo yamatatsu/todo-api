@@ -44,3 +44,55 @@ test("404　エラーとなること", async () => {
 
   expect(res.status).toEqual(404);
 });
+
+test("文字数チェックエラーとなること", async () => {
+  const { user } = await createUser1(prisma);
+
+  const body = {
+    name: "--------10--------20--------30--------40--------50--------60-",
+  };
+  const res = await request(createApp())
+    .put(`/user`)
+    .send(body)
+    .set("x-apigateway-event", getXApigatewayEvent(user.sub))
+    .set("x-apigateway-context", "{}");
+
+  expect(res.status).toEqual(400);
+  expect(res.body).toEqual({
+    issues: [
+      {
+        code: "too_big",
+        inclusive: true,
+        maximum: 60,
+        message: "Should be at most 60 characters long",
+        path: ["name"],
+        type: "string",
+      },
+    ],
+  });
+});
+
+test("有効文字チェックエラーとなること", async () => {
+  const { user } = await createUser1(prisma);
+
+  const body = {
+    name: `hoge\nhoge`,
+  };
+  const res = await request(createApp())
+    .put(`/user`)
+    .send(body)
+    .set("x-apigateway-event", getXApigatewayEvent(user.sub))
+    .set("x-apigateway-context", "{}");
+
+  expect(res.status).toEqual(400);
+  expect(res.body).toEqual({
+    issues: [
+      {
+        code: "invalid_string",
+        message: "Invalid",
+        path: ["name"],
+        validation: "regex",
+      },
+    ],
+  });
+});

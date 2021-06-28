@@ -82,3 +82,66 @@ test("400エラーとなること", async () => {
     ],
   });
 });
+
+test("文字数チェックエラーとなること", async () => {
+  const { user, board } = await createUser1(prisma);
+
+  const body = {
+    title: "--------10--------20--------30--------40--------50-",
+    description:
+      "-------------------------------------------------------------------------------------------------100-------------------------------------------------------------------------------------------------200-------------------------------------------------------------------------------------------------300-------------------------------------------------------------------------------------------------400-------------------------------------------------------------------------------------------------500-",
+  };
+  const res = await request(createApp())
+    .post(`/board/${board.id}/task`)
+    .send(body)
+    .set("x-apigateway-event", getXApigatewayEvent(user.sub))
+    .set("x-apigateway-context", "{}");
+
+  expect(res.status).toEqual(400);
+  expect(res.body).toEqual({
+    issues: [
+      {
+        code: "too_big",
+        inclusive: true,
+        maximum: 50,
+        message: "Should be at most 50 characters long",
+        path: ["title"],
+        type: "string",
+      },
+      {
+        code: "too_big",
+        inclusive: true,
+        maximum: 500,
+        message: "Should be at most 500 characters long",
+        path: ["description"],
+        type: "string",
+      },
+    ],
+  });
+});
+
+test("有効文字チェックエラーとなること", async () => {
+  const { user, board } = await createUser1(prisma);
+
+  const body = {
+    title: `hoge\nhoge`,
+    description: "test-description",
+  };
+  const res = await request(createApp())
+    .post(`/board/${board.id}/task`)
+    .send(body)
+    .set("x-apigateway-event", getXApigatewayEvent(user.sub))
+    .set("x-apigateway-context", "{}");
+
+  expect(res.status).toEqual(400);
+  expect(res.body).toEqual({
+    issues: [
+      {
+        code: "invalid_string",
+        message: "Invalid",
+        path: ["title"],
+        validation: "regex",
+      },
+    ],
+  });
+});

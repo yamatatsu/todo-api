@@ -1,16 +1,20 @@
 import * as zod from "zod";
 
-const userIdSchema = zod.number();
-const titleSchema = zod.string();
-const descriptionSchema = zod.string().optional();
+const authorIdSchema = zod.number();
+const titleSchema = zod
+  .string()
+  .max(50)
+  // 改行を許容しない
+  .regex(/^[^\n]*$/);
+const descriptionSchema = zod.string().max(500);
 
 export const schemaForCreate = zod.object({
-  authorId: userIdSchema,
+  authorId: authorIdSchema,
   title: titleSchema,
-  description: descriptionSchema,
+  description: descriptionSchema.optional(),
 });
 
 export const schemaForUpdate = zod.object({
   title: titleSchema.optional(),
-  description: descriptionSchema,
+  description: descriptionSchema.optional(),
 });

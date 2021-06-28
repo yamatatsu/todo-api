@@ -52,9 +52,9 @@ curl -H "Content-Type: application/json" -H "x-ta-token:${jwtToken}" "${apiUrlBa
 
 ### Body
 
-| key  | type   | required |
-| ---- | ------ | -------- |
-| name | String | yes      |
+| key  | type   | required | max length | note     |
+| ---- | ------ | -------- | ---------- | -------- |
+| name | String | yes      | 60         | 改行不可 |
 
 ### Request Example
 
@@ -74,9 +74,9 @@ curl -H "Content-Type: application/json" -H "x-ta-token:${jwtToken}" -X POST -d 
 
 ### Body
 
-| key  | type   | required |
-| ---- | ------ | -------- |
-| name | String | yes      |
+| key  | type   | required | max length | note     |
+| ---- | ------ | -------- | ---------- | -------- |
+| name | String | yes      | 60         | 改行不可 |
 
 ### Request Example
 
@@ -96,10 +96,10 @@ Board を作成する。
 
 ### Body
 
-| key         | type   | required |
-| ----------- | ------ | -------- |
-| title       | String | yes      |
-| description | String | no       |
+| key         | type   | required | max | note     |
+| ----------- | ------ | -------- | --- | -------- |
+| title       | String | yes      | 50  | 改行不可 |
+| description | String | no       | 500 |          |
 
 ### Request Example
 
@@ -119,10 +119,10 @@ Board を更新する。
 
 ### Body
 
-| key         | type   | required |
-| ----------- | ------ | -------- |
-| title       | String | yes      |
-| description | String | no       |
+| key         | type   | required | max | note     |
+| ----------- | ------ | -------- | --- | -------- |
+| title       | String | no       | 50  | 改行不可 |
+| description | String | no       | 500 |          |
 
 ### Request Example
 
@@ -190,10 +190,10 @@ Task を作成する
 
 ### Body
 
-| key         | type   | required |
-| ----------- | ------ | -------- |
-| title       | String | yes      |
-| description | String | no       |
+| key         | type   | required | max | note     |
+| ----------- | ------ | -------- | --- | -------- |
+| title       | String | yes      | 50  | 改行不可 |
+| description | String | no       | 500 |          |
 
 ### Request Example
 
@@ -213,10 +213,10 @@ Task を更新する
 
 ### Body
 
-| key         | type   | required |
-| ----------- | ------ | -------- |
-| title       | String | yes      |
-| description | String | no       |
+| key         | type   | required | max | note     |
+| ----------- | ------ | -------- | --- | -------- |
+| title       | String | no       | 50  | 改行不可 |
+| description | String | no       | 500 |          |
 
 ### Request Example
 

@@ -28,10 +28,12 @@ export const getXApigatewayEvent = (sub: string) =>
     requestContext: { authorizer: { claims: { sub } } },
   });
 
+export const sampleUuid = "ccb4e9ba-ce25-410f-bfbe-7cd55cc09a57";
+
 export const createUser1 = async (prisma: PrismaClient) => {
   const user = await prisma.user.create({
     data: {
-      sub: "test-user-sub1",
+      sub: sampleUuid,
       name: "test-user-name1",
       boards: {
         create: {
