@@ -1,0 +1,35 @@
+version: "3.7"
+services:
+  server:
+    image: node:16-alpine
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - jest_cache:/tmp/jest_0
+    working_dir: /app/packages/server
+    # DATABASE_URL がprismaに渡らない。困った。とりま .env で凌ぐよ。
+    # environment:
+    #   - DATABASE_URL="mysql://tauser:password@database:3306/tadb"
+    #   - NODE_ENV="development"
+    command: yarn start
+    restart: always
+    depends_on:
+      - database
+
+  database:
+    image: mariadb
+    ports:
+      - "53306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      - MARIADB_RANDOM_ROOT_PASSWORD=yes
+      - MYSQL_DATABASE=tadb
+      - MARIADB_USER=tauser
+      - MARIADB_PASSWORD=password
+    command: "mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci"
+
+volumes:
+  db_data:
+  jest_cache:

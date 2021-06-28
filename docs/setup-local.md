@@ -1,43 +1,27 @@
 # セットアップ
 
-## 0. 準備
-
-mysql を起動する。
-
-```sh
-docker run -d --name mariadb-server -e MARIADB_RANDOM_ROOT_PASSWORD=yes -e MYSQL_DATABASE=tadb -e MARIADB_USER=tauser -e MARIADB_PASSWORD=password -p 3306:3306 mariadb mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
-```
-
-## 1. yarn install
-
-```sh
-yarn
-```
-
-> note: yarn berry を用いています。
-
-## 2. .env file
+## 1. .env file
 
 ```sh
 cp packages/server/.env.example packages/server/.env
 ```
 
-## 3. prisma migrate
+## 2. setup yarn and prisma
 
 ```sh
-cd packages/server
-yarn prisma migrate deploy
+docker compose run --rm server yarn
+docker compose run --rm server yarn prisma migrate deploy
+docker compose run --rm server yarn prisma generate
 ```
 
-### 4. prisma generate
+## 3. up
 
 ```sh
-yarn prisma generate
+docker compose up
 ```
 
-## 5. start server
+### 4. test
 
 ```sh
-cd packages/server
-yarn start
+docker compose run --rm server yarn test:large
 ```
