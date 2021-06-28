@@ -57,6 +57,8 @@ TBD
    - [x] simulator の整備
    - [x] インフラ構築動作確認の手順
    - [x] [setup-local](./docs/setup-local.md)が多分足りてない。やってみる。
+   - [ ] Expressのセキュリティ対応
+     - https://expressjs.com/ja/advanced/best-practice-security.html
    - API インターフェースの見直しと文書化
      - [x] 入力チェック見直し
        - 最大文字数
