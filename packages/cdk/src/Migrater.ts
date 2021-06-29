@@ -30,6 +30,7 @@ export class MigraterStack extends Stack {
       // 途中で実行止まると怖いので5分くらいを設定する
       timeout: Duration.minutes(5),
       vpc: props.vpc,
+      vpcSubnets: { subnetGroupName: "application" },
       securityGroups: [props.securityGroup],
       environment: {
         SECRET_NAME: props.dbCredentialSecret.secretName,

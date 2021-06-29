@@ -30,6 +30,7 @@ export class ApiServerStack extends Stack {
       runtime: aws_lambda.Runtime.NODEJS_14_X,
       timeout: Duration.seconds(10),
       vpc: props.vpc,
+      vpcSubnets: { subnetGroupName: "application" },
       securityGroups: [props.securityGroup],
       bundling: {
         /**

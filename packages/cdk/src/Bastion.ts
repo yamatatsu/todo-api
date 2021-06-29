@@ -21,9 +21,7 @@ export class BastionStack extends Stack {
       instanceType: instanceType,
       machineImage: machineImage,
       vpc: props.vpc,
-      vpcSubnets: {
-        subnetType: aws_ec2.SubnetType.PRIVATE,
-      },
+      vpcSubnets: { subnetGroupName: "application" },
     });
 
     this.bastion.addSecurityGroup(props.securityGroup);

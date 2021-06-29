@@ -50,7 +50,7 @@ export class DatabaseStack extends Stack {
       defaultDatabaseName: "tadb",
       instanceProps: {
         vpc: props.vpc,
-        vpcSubnets: { subnetType: aws_ec2.SubnetType.ISOLATED },
+        vpcSubnets: { subnetGroupName: "rds" },
         securityGroups: [dbSG],
       },
       removalPolicy: RemovalPolicy.DESTROY,
