@@ -9,6 +9,7 @@ import {
   aws_secretsmanager,
   Duration,
   aws_cognito,
+  aws_iam,
 } from "aws-cdk-lib";
 
 type Props = StackProps & {
@@ -24,7 +25,6 @@ export class ApiServerStack extends Stack {
   constructor(parent: App, id: string, props: Props) {
     super(parent, id, props);
 
-    // TODO: lambda insight入れる
     const handler = new aws_lambda_nodejs.NodejsFunction(this, "Lambda", {
       entry: props.codeEntry,
       runtime: aws_lambda.Runtime.NODEJS_14_X,
@@ -72,6 +72,22 @@ export class ApiServerStack extends Stack {
     });
 
     props.dbCredentialSecret.grantRead(handler);
+
+    // Lambda Insight
+
+    handler.role?.addManagedPolicy(
+      aws_iam.ManagedPolicy.fromAwsManagedPolicyName(
+        "CloudWatchLambdaInsightsExecutionRolePolicy"
+      )
+    );
+    const layer = aws_lambda.LayerVersion.fromLayerVersionArn(
+      this,
+      `LayerFromArn`,
+      "arn:aws:lambda:ap-northeast-1:580247275435:layer:LambdaInsightsExtension:14"
+    );
+    handler.addLayers(layer);
+
+    // API
 
     const authorizer = new aws_apigateway.CognitoUserPoolsAuthorizer(
       this,
