@@ -57,7 +57,7 @@ Object {
           "S3Bucket": Object {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "e1bcad859b48e8247fca090eca703c911ba2ba2dfdc415c5afed17b60c2ba246.zip",
+          "S3Key": "647d1b170bdc990dce914c8b707f288feeabe5392f6117638a5c3a17bb1e8463.zip",
         },
         "Environment": Object {
           "Variables": Object {
@@ -131,6 +131,9 @@ Object {
         },
         "Runtime": "nodejs14.x",
         "Timeout": 10,
+        "TracingConfig": Object {
+          "Mode": "Active",
+        },
         "VpcConfig": Object {
           "SecurityGroupIds": Array [
             Object {
@@ -555,6 +558,14 @@ Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
+            Object {
+              "Action": Array [
+                "xray:PutTraceSegments",
+                "xray:PutTelemetryRecords",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
             Object {
               "Action": Array [
                 "secretsmanager:GetSecretValue",

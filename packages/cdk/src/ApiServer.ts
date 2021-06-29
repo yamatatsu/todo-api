@@ -69,6 +69,7 @@ export class ApiServerStack extends Stack {
         SECRET_NAME: props.dbCredentialSecret.secretName,
         DATABASE_ENDPOINT: props.proxyEndpoint,
       },
+      tracing: aws_lambda.Tracing.ACTIVE,
     });
 
     props.dbCredentialSecret.grantRead(handler);
