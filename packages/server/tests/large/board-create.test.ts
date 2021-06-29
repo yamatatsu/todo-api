@@ -20,7 +20,18 @@ test("Boardが作成できること", async () => {
   expect(res.body).toEqual({ count: 1 });
 });
 
-test("必須チェックエラーとなること", async () => {
+test("User未作成の場合、404エラーとなること", async () => {
+  const body = { title: "test-title", description: "test-description" };
+  const res = await request(createApp())
+    .post("/board")
+    .send(body)
+    .set("x-apigateway-event", getXApigatewayEvent("dummy-sub"))
+    .set("x-apigateway-context", "{}");
+
+  expect(res.status).toEqual(404);
+});
+
+test("titleを指定しない場合、必須チェックエラーとなること", async () => {
   const { user } = await createUser1(prisma);
 
   const body = { description: "test-description" };
@@ -105,15 +116,4 @@ test("有効文字チェックエラーとなること", async () => {
       },
     ],
   });
-});
-
-test("404エラーとなること", async () => {
-  const body = { title: "test-title", description: "test-description" };
-  const res = await request(createApp())
-    .post("/board")
-    .send(body)
-    .set("x-apigateway-event", getXApigatewayEvent("dummy-sub"))
-    .set("x-apigateway-context", "{}");
-
-  expect(res.status).toEqual(404);
 });

@@ -24,7 +24,7 @@ test("Taskが更新できること", async () => {
   });
 });
 
-test("404エラーとなること", async () => {
+test("存在しないboardIdの場合、404エラーとなること", async () => {
   const {
     user,
     tasks: [task],
@@ -38,7 +38,7 @@ test("404エラーとなること", async () => {
   expect(res.status).toEqual(404);
 });
 
-test("404エラーとなること", async () => {
+test("存在しないtaskIdの場合、404エラーとなること", async () => {
   const { user, board } = await createUser1(prisma);
 
   const res = await request(createApp())
@@ -49,7 +49,7 @@ test("404エラーとなること", async () => {
   expect(res.status).toEqual(404);
 });
 
-test("404エラーとなること", async () => {
+test("Userが存在しない場合、404エラーとなること", async () => {
   const {
     board,
     tasks: [task],

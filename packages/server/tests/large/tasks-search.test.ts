@@ -22,6 +22,7 @@ test("keywordを指定しない場合、boardのすべてのTaskが取得でき�
     .set("x-apigateway-event", getXApigatewayEvent(user.sub))
     .set("x-apigateway-context", "{}");
 
+  expect(res.status).toEqual(200);
   expect(res.body).toEqual([
     {
       id: expect.any(Number),
@@ -69,6 +70,7 @@ test("keywordが空文字の場合、boardのすべてのTaskが取得できる�
     .set("x-apigateway-event", getXApigatewayEvent(user.sub))
     .set("x-apigateway-context", "{}");
 
+  expect(res.status).toEqual(200);
   expect(res.body).toEqual([
     {
       id: expect.any(Number),
@@ -99,7 +101,7 @@ test("keywordが空文字の場合、boardのすべてのTaskが取得できる�
     },
   ]);
 });
-test("keywordが含まれるTaskが取得できること", async () => {
+test("keywordが指定された場合、keywordが含まれるTaskが取得できること", async () => {
   const { user, board } = await createUser1(prisma);
   await prisma.board.create({
     data: {
@@ -116,6 +118,7 @@ test("keywordが含まれるTaskが取得できること", async () => {
     .set("x-apigateway-event", getXApigatewayEvent(user.sub))
     .set("x-apigateway-context", "{}");
 
+  expect(res.status).toEqual(200);
   expect(res.body).toEqual(
     expect.arrayContaining([
       {
@@ -140,7 +143,7 @@ test("keywordが含まれるTaskが取得できること", async () => {
   );
 });
 
-test("404　エラーとなること", async () => {
+test("存在しないboardIdの場合、404エラーとなること", async () => {
   const { user } = await createUser1(prisma);
 
   const res = await request(createApp())
@@ -151,28 +154,11 @@ test("404　エラーとなること", async () => {
   expect(res.status).toEqual(404);
 });
 
-test("404　エラーとなること", async () => {
-  const data = await prisma.user.create({
-    data: {
-      sub: "test-user-sub1",
-      name: "test-user-name1",
-      boards: {
-        create: {
-          title: "test-board-title1",
-          tasks: {
-            create: [
-              { title: "test-task-title1" },
-              { title: "test-task-title2" },
-            ],
-          },
-        },
-      },
-    },
-    include: { boards: { include: { tasks: true } } },
-  });
+test("Userが存在しない場合、404エラーとなること", async () => {
+  const { board } = await createUser1(prisma);
 
   const res = await request(createApp())
-    .get(`/board/${data.boards[0].id}/tasks`)
+    .get(`/board/${board.id}/tasks`)
     .set("x-apigateway-event", getXApigatewayEvent("dummy-sub"))
     .set("x-apigateway-context", "{}");
 

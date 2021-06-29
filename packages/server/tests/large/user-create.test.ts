@@ -19,6 +19,7 @@ test("ユーザーが作成できること", async () => {
     .set("x-apigateway-event", getXApigatewayEvent(sampleUuid))
     .set("x-apigateway-context", "{}");
 
+  expect(res.status).toEqual(200);
   expect(res.body).toEqual({ count: 1 });
 });
 
@@ -30,6 +31,7 @@ test("必須チェックエラーとなること", async () => {
     .set("x-apigateway-event", getXApigatewayEvent(sampleUuid))
     .set("x-apigateway-context", "{}");
 
+  expect(res.status).toEqual(400);
   expect(res.body).toEqual({
     issues: [
       {
@@ -52,6 +54,7 @@ test("Unique制約エラーとなること", async () => {
     .set("x-apigateway-event", getXApigatewayEvent(user.sub))
     .set("x-apigateway-context", "{}");
 
+  expect(res.status).toEqual(400);
   expect(res.body).toEqual({
     message: "A same sub user has found. This user has already created.",
   });

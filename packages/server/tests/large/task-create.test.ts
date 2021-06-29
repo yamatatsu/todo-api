@@ -20,7 +20,7 @@ test("Taskが作成できること", async () => {
   expect(res.body).toEqual({ count: 1 });
 });
 
-test("404エラーとなること", async () => {
+test("存在しないboardIdの場合、404エラーとなること", async () => {
   const { user } = await createUser1(prisma);
 
   const body = { title: "test-title", description: "test-description" };
@@ -33,7 +33,7 @@ test("404エラーとなること", async () => {
   expect(res.status).toEqual(404);
 });
 
-test("404エラーとなること", async () => {
+test("存在しないboardIdの場合、404エラーとなること", async () => {
   const { user } = await createUser1(prisma);
 
   const body = { title: "test-title", description: "test-description" };
@@ -46,7 +46,7 @@ test("404エラーとなること", async () => {
   expect(res.status).toEqual(404);
 });
 
-test("404エラーとなること", async () => {
+test("Userが存在しない場合、404エラーとなること", async () => {
   const { board } = await createUser1(prisma);
 
   const body = { title: "test-title", description: "test-description" };
@@ -59,7 +59,7 @@ test("404エラーとなること", async () => {
   expect(res.status).toEqual(404);
 });
 
-test("400エラーとなること", async () => {
+test("titleがない場合、400エラーとなること", async () => {
   const { user, board } = await createUser1(prisma);
 
   const body = { description: "test-description" };

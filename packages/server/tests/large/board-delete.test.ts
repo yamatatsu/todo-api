@@ -20,7 +20,7 @@ test("Boardが削除できること", async () => {
   });
 });
 
-test("404エラーとなること", async () => {
+test("存在しないboardIdの場合、404エラーとなること", async () => {
   const { user } = await createUser1(prisma);
 
   const res = await request(createApp())
@@ -31,7 +31,7 @@ test("404エラーとなること", async () => {
   expect(res.status).toEqual(404);
 });
 
-test("404エラーとなること", async () => {
+test("Userが存在しない場合、404エラーとなること", async () => {
   const { board } = await createUser1(prisma);
 
   const res = await request(createApp())

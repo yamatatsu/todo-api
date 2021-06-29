@@ -63,7 +63,7 @@ TBD
        - 有効文字
      - [ ] 入力チェック見直し 2
        - サニタイズ
-     - [ ] テスト: status の expext を追加
+     - [x] テスト: status の expext を追加
      - [ ] エラーレスポンスの統一
      - [ ] エラーレスポンスの文書化
    - 実装の見直し
@@ -76,7 +76,7 @@ TBD
      - [ ] synthetics monitor
    - 内部品質
      - [ ] Migrater の応答がエラーになっている
-     - [ ] テストの文言
+     - [x] テストの文言
      - [x] テストしやすい docker compose 環境
      - [x] カバレッジ取る
      - [ ] use https://middy.js.org/

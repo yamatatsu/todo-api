@@ -19,7 +19,7 @@ test("ユーザーが更新できること", async () => {
   expect(res.body).toEqual({ count: 1 });
 });
 
-test("更新されずに正常を返すこと", async () => {
+test("bodyが空オブジェクトの場合、更新されずに正常を返すこと", async () => {
   const { user } = await createUser1(prisma);
 
   const res = await request(createApp())
@@ -35,7 +35,7 @@ test("更新されずに正常を返すこと", async () => {
 /**
  * cognito userは作成したがまだuser createしていない状態で Get user を呼び出した場合
  */
-test("404　エラーとなること", async () => {
+test("Userが存在しない場合、404エラーとなること", async () => {
   const res = await request(createApp())
     .put(`/user`)
     .send({ name: "test-user-name1:updated" })
