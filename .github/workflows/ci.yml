@@ -1,0 +1,17 @@
+name: CI
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cp packages/server/.env.example packages/server/.env
+      - run: docker compose run --rm server yarn
+      - run: docker compose run --rm server yarn prisma migrate deploy
+      - run: docker compose run --rm server yarn prisma generate
+      - run: docker compose run --rm server yarn test:large --silent
