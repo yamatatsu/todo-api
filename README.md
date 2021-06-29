@@ -24,7 +24,24 @@ docker run -v $PWD/schemaspy:/output --net=host schemaspy/schemaspy:6.1.0 -t mys
 
 ### CRUD
 
-TBD
+|                                             | User | Board | Task |
+| ------------------------------------------- | ---- | ----- | ---- |
+| GET `/user`                                 | R    | R     |      |
+| POST `/user`                                | C    | C     | C    |
+| PUT `/user`                                 | U    |       |      |
+| POST `/board`                               |      | C     |      |
+| PUT `/board/:boardId`                       |      | U     |      |
+| DELETE `/board/:boardId`                    |      | D     |      |
+| GET `/board/:boardId/tasks`                 |      |       | R    |
+| POST `/board/:boardId/task`                 |      |       | C    |
+| PUT `/board/:boardId/task/:taskId`          |      |       | U    |
+| DELETE `/board/:boardId/task/:taskId`       |      |       | D    |
+| PUT `/board/:boardId/task/:taskId/finished` |      |       | U    |
+
+- Cognito UserPool のアカウントと User は別々に作成する
+- Board 一覧をトップで表示するために GET `/user` は Board を含めて返す
+- サンプルとしての Board と Task を表示するために POST `/user` は Board と Task も作成する
+- アカウントと User の削除について、要件を出し切れていない。。。
 
 ### 構成図
 
