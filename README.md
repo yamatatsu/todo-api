@@ -70,9 +70,10 @@ TBD
      - [ ] トランザクション見直し
    - 運用
      - [ ] ログ設計
-     - [ ] nat 落とす
-     - [ ] CI/CD
-     - [ ] lambda insight
+     - [x] nat 落とす
+     - [x] CI
+     - [ ] CD
+     - [x] lambda insight
      - [ ] synthetics monitor
    - 内部品質
      - [ ] Migrater の応答がエラーになっている
