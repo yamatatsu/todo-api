@@ -6,7 +6,12 @@ test("snapshot test", () => {
   const app = new App();
   const stack = new Stack(app, "dummyStack");
 
-  const vpc = new aws_ec2.Vpc(stack, "Vpc");
+  const vpc = new aws_ec2.Vpc(stack, "Vpc", {
+    subnetConfiguration: [
+      { name: "application", subnetType: aws_ec2.SubnetType.ISOLATED },
+      { name: "rds", subnetType: aws_ec2.SubnetType.ISOLATED },
+    ],
+  });
   const securityGroup = new aws_ec2.SecurityGroup(stack, "SecurityGroup", {
     vpc,
   });

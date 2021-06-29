@@ -3,6 +3,77 @@
 exports[`snapshot test 1`] = `
 Object {
   "Resources": Object {
+    "SecretManagerVpcEndpoint708CAAF9": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "SecretManagerVpcEndpointSecurityGroupB2F67559",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": "com.amazonaws.ap-northeast-1.secretsmanager",
+        "SubnetIds": Array [
+          Object {
+            "Ref": "VpcapplicationSubnet1Subnet8B68205B",
+          },
+          Object {
+            "Ref": "VpcapplicationSubnet2Subnet29670962",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "SecretManagerVpcEndpointSecurityGroupB2F67559": Object {
+      "Properties": Object {
+        "GroupDescription": "Target/SecretManagerVpcEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "Vpc8378EB38",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "Vpc8378EB38",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
     "Vpc8378EB38": Object {
       "Properties": Object {
         "CidrBlock": "10.0.0.0/16",
@@ -17,92 +88,6 @@ Object {
         ],
       },
       "Type": "AWS::EC2::VPC",
-    },
-    "VpcIGWD7BA715C": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "Target/Vpc",
-          },
-        ],
-      },
-      "Type": "AWS::EC2::InternetGateway",
-    },
-    "VpcNatRoleA1B5D171": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": "ec2.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "Target/Vpc",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "VpcNatSecurityGroup8DA26EDC": Object {
-      "Properties": Object {
-        "GroupDescription": "Security Group for NAT instances",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "SecurityGroupIngress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "from 0.0.0.0/0:ALL TRAFFIC",
-            "IpProtocol": "-1",
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "Target/Vpc",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "VpcVPCGWBF912B6E": Object {
-      "Properties": Object {
-        "InternetGatewayId": Object {
-          "Ref": "VpcIGWD7BA715C",
-        },
-        "VpcId": Object {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::VPCGatewayAttachment",
-    },
-    "VpcapplicationSubnet1DefaultRouteD1F37131": Object {
-      "Properties": Object {
-        "DestinationCidrBlock": "0.0.0.0/0",
-        "InstanceId": Object {
-          "Ref": "VpcingressSubnet1NatInstanceBF68AE53",
-        },
-        "RouteTableId": Object {
-          "Ref": "VpcapplicationSubnet1RouteTableF03E8296",
-        },
-      },
-      "Type": "AWS::EC2::Route",
     },
     "VpcapplicationSubnet1RouteTableAssociation75D5245D": Object {
       "Properties": Object {
@@ -132,7 +117,7 @@ Object {
     "VpcapplicationSubnet1Subnet8B68205B": Object {
       "Properties": Object {
         "AvailabilityZone": "dummy1a",
-        "CidrBlock": "10.0.3.0/24",
+        "CidrBlock": "10.0.0.0/24",
         "MapPublicIpOnLaunch": false,
         "Tags": Array [
           Object {
@@ -141,7 +126,7 @@ Object {
           },
           Object {
             "Key": "aws-cdk:subnet-type",
-            "Value": "Private",
+            "Value": "Isolated",
           },
           Object {
             "Key": "Name",
@@ -153,18 +138,6 @@ Object {
         },
       },
       "Type": "AWS::EC2::Subnet",
-    },
-    "VpcapplicationSubnet2DefaultRoute928D347B": Object {
-      "Properties": Object {
-        "DestinationCidrBlock": "0.0.0.0/0",
-        "InstanceId": Object {
-          "Ref": "VpcingressSubnet2NatInstanceF8B5078A",
-        },
-        "RouteTableId": Object {
-          "Ref": "VpcapplicationSubnet2RouteTable17378AED",
-        },
-      },
-      "Type": "AWS::EC2::Route",
     },
     "VpcapplicationSubnet2RouteTable17378AED": Object {
       "Properties": Object {
@@ -194,7 +167,7 @@ Object {
     "VpcapplicationSubnet2Subnet29670962": Object {
       "Properties": Object {
         "AvailabilityZone": "dummy1b",
-        "CidrBlock": "10.0.4.0/24",
+        "CidrBlock": "10.0.1.0/24",
         "MapPublicIpOnLaunch": false,
         "Tags": Array [
           Object {
@@ -203,403 +176,11 @@ Object {
           },
           Object {
             "Key": "aws-cdk:subnet-type",
-            "Value": "Private",
+            "Value": "Isolated",
           },
           Object {
             "Key": "Name",
             "Value": "Target/Vpc/applicationSubnet2",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::Subnet",
-    },
-    "VpcapplicationSubnet3DefaultRoute8AE3F963": Object {
-      "Properties": Object {
-        "DestinationCidrBlock": "0.0.0.0/0",
-        "InstanceId": Object {
-          "Ref": "VpcingressSubnet3NatInstance61179379",
-        },
-        "RouteTableId": Object {
-          "Ref": "VpcapplicationSubnet3RouteTable6E2E0D9E",
-        },
-      },
-      "Type": "AWS::EC2::Route",
-    },
-    "VpcapplicationSubnet3RouteTable6E2E0D9E": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "Target/Vpc/applicationSubnet3",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::RouteTable",
-    },
-    "VpcapplicationSubnet3RouteTableAssociationD51CCB50": Object {
-      "Properties": Object {
-        "RouteTableId": Object {
-          "Ref": "VpcapplicationSubnet3RouteTable6E2E0D9E",
-        },
-        "SubnetId": Object {
-          "Ref": "VpcapplicationSubnet3SubnetB937EB65",
-        },
-      },
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-    },
-    "VpcapplicationSubnet3SubnetB937EB65": Object {
-      "Properties": Object {
-        "AvailabilityZone": "dummy1c",
-        "CidrBlock": "10.0.5.0/24",
-        "MapPublicIpOnLaunch": false,
-        "Tags": Array [
-          Object {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "application",
-          },
-          Object {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Private",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Target/Vpc/applicationSubnet3",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::Subnet",
-    },
-    "VpcingressSubnet1DefaultRoute4188A546": Object {
-      "DependsOn": Array [
-        "VpcVPCGWBF912B6E",
-      ],
-      "Properties": Object {
-        "DestinationCidrBlock": "0.0.0.0/0",
-        "GatewayId": Object {
-          "Ref": "VpcIGWD7BA715C",
-        },
-        "RouteTableId": Object {
-          "Ref": "VpcingressSubnet1RouteTable804C7A26",
-        },
-      },
-      "Type": "AWS::EC2::Route",
-    },
-    "VpcingressSubnet1NatInstanceBF68AE53": Object {
-      "DependsOn": Array [
-        "VpcNatRoleA1B5D171",
-      ],
-      "Properties": Object {
-        "AvailabilityZone": "dummy1a",
-        "IamInstanceProfile": Object {
-          "Ref": "VpcingressSubnet1NatInstanceInstanceProfile18C45F73",
-        },
-        "ImageId": "ami-1234",
-        "InstanceType": "t2.nano",
-        "SecurityGroupIds": Array [
-          Object {
-            "Fn::GetAtt": Array [
-              "VpcNatSecurityGroup8DA26EDC",
-              "GroupId",
-            ],
-          },
-        ],
-        "SourceDestCheck": false,
-        "SubnetId": Object {
-          "Ref": "VpcingressSubnet1Subnet059F22C6",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "Target/Vpc/ingressSubnet1/NatInstance",
-          },
-        ],
-        "UserData": Object {
-          "Fn::Base64": "#!/bin/bash",
-        },
-      },
-      "Type": "AWS::EC2::Instance",
-    },
-    "VpcingressSubnet1NatInstanceInstanceProfile18C45F73": Object {
-      "Properties": Object {
-        "Roles": Array [
-          Object {
-            "Ref": "VpcNatRoleA1B5D171",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::InstanceProfile",
-    },
-    "VpcingressSubnet1RouteTable804C7A26": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "Target/Vpc/ingressSubnet1",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::RouteTable",
-    },
-    "VpcingressSubnet1RouteTableAssociation5DF54E70": Object {
-      "Properties": Object {
-        "RouteTableId": Object {
-          "Ref": "VpcingressSubnet1RouteTable804C7A26",
-        },
-        "SubnetId": Object {
-          "Ref": "VpcingressSubnet1Subnet059F22C6",
-        },
-      },
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-    },
-    "VpcingressSubnet1Subnet059F22C6": Object {
-      "Properties": Object {
-        "AvailabilityZone": "dummy1a",
-        "CidrBlock": "10.0.0.0/24",
-        "MapPublicIpOnLaunch": true,
-        "Tags": Array [
-          Object {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "ingress",
-          },
-          Object {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Public",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Target/Vpc/ingressSubnet1",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::Subnet",
-    },
-    "VpcingressSubnet2DefaultRoute18203BC3": Object {
-      "DependsOn": Array [
-        "VpcVPCGWBF912B6E",
-      ],
-      "Properties": Object {
-        "DestinationCidrBlock": "0.0.0.0/0",
-        "GatewayId": Object {
-          "Ref": "VpcIGWD7BA715C",
-        },
-        "RouteTableId": Object {
-          "Ref": "VpcingressSubnet2RouteTable8B0E23A7",
-        },
-      },
-      "Type": "AWS::EC2::Route",
-    },
-    "VpcingressSubnet2NatInstanceF8B5078A": Object {
-      "DependsOn": Array [
-        "VpcNatRoleA1B5D171",
-      ],
-      "Properties": Object {
-        "AvailabilityZone": "dummy1b",
-        "IamInstanceProfile": Object {
-          "Ref": "VpcingressSubnet2NatInstanceInstanceProfile7B30C372",
-        },
-        "ImageId": "ami-1234",
-        "InstanceType": "t2.nano",
-        "SecurityGroupIds": Array [
-          Object {
-            "Fn::GetAtt": Array [
-              "VpcNatSecurityGroup8DA26EDC",
-              "GroupId",
-            ],
-          },
-        ],
-        "SourceDestCheck": false,
-        "SubnetId": Object {
-          "Ref": "VpcingressSubnet2SubnetF175D754",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "Target/Vpc/ingressSubnet2/NatInstance",
-          },
-        ],
-        "UserData": Object {
-          "Fn::Base64": "#!/bin/bash",
-        },
-      },
-      "Type": "AWS::EC2::Instance",
-    },
-    "VpcingressSubnet2NatInstanceInstanceProfile7B30C372": Object {
-      "Properties": Object {
-        "Roles": Array [
-          Object {
-            "Ref": "VpcNatRoleA1B5D171",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::InstanceProfile",
-    },
-    "VpcingressSubnet2RouteTable8B0E23A7": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "Target/Vpc/ingressSubnet2",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::RouteTable",
-    },
-    "VpcingressSubnet2RouteTableAssociation39E1BA3A": Object {
-      "Properties": Object {
-        "RouteTableId": Object {
-          "Ref": "VpcingressSubnet2RouteTable8B0E23A7",
-        },
-        "SubnetId": Object {
-          "Ref": "VpcingressSubnet2SubnetF175D754",
-        },
-      },
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-    },
-    "VpcingressSubnet2SubnetF175D754": Object {
-      "Properties": Object {
-        "AvailabilityZone": "dummy1b",
-        "CidrBlock": "10.0.1.0/24",
-        "MapPublicIpOnLaunch": true,
-        "Tags": Array [
-          Object {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "ingress",
-          },
-          Object {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Public",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Target/Vpc/ingressSubnet2",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::Subnet",
-    },
-    "VpcingressSubnet3DefaultRoute61F379BE": Object {
-      "DependsOn": Array [
-        "VpcVPCGWBF912B6E",
-      ],
-      "Properties": Object {
-        "DestinationCidrBlock": "0.0.0.0/0",
-        "GatewayId": Object {
-          "Ref": "VpcIGWD7BA715C",
-        },
-        "RouteTableId": Object {
-          "Ref": "VpcingressSubnet3RouteTable437A5D75",
-        },
-      },
-      "Type": "AWS::EC2::Route",
-    },
-    "VpcingressSubnet3NatInstance61179379": Object {
-      "DependsOn": Array [
-        "VpcNatRoleA1B5D171",
-      ],
-      "Properties": Object {
-        "AvailabilityZone": "dummy1c",
-        "IamInstanceProfile": Object {
-          "Ref": "VpcingressSubnet3NatInstanceInstanceProfile1B4AFC52",
-        },
-        "ImageId": "ami-1234",
-        "InstanceType": "t2.nano",
-        "SecurityGroupIds": Array [
-          Object {
-            "Fn::GetAtt": Array [
-              "VpcNatSecurityGroup8DA26EDC",
-              "GroupId",
-            ],
-          },
-        ],
-        "SourceDestCheck": false,
-        "SubnetId": Object {
-          "Ref": "VpcingressSubnet3Subnet349C9312",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "Target/Vpc/ingressSubnet3/NatInstance",
-          },
-        ],
-        "UserData": Object {
-          "Fn::Base64": "#!/bin/bash",
-        },
-      },
-      "Type": "AWS::EC2::Instance",
-    },
-    "VpcingressSubnet3NatInstanceInstanceProfile1B4AFC52": Object {
-      "Properties": Object {
-        "Roles": Array [
-          Object {
-            "Ref": "VpcNatRoleA1B5D171",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::InstanceProfile",
-    },
-    "VpcingressSubnet3RouteTable437A5D75": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "Target/Vpc/ingressSubnet3",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::RouteTable",
-    },
-    "VpcingressSubnet3RouteTableAssociation2BCEBB48": Object {
-      "Properties": Object {
-        "RouteTableId": Object {
-          "Ref": "VpcingressSubnet3RouteTable437A5D75",
-        },
-        "SubnetId": Object {
-          "Ref": "VpcingressSubnet3Subnet349C9312",
-        },
-      },
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-    },
-    "VpcingressSubnet3Subnet349C9312": Object {
-      "Properties": Object {
-        "AvailabilityZone": "dummy1c",
-        "CidrBlock": "10.0.2.0/24",
-        "MapPublicIpOnLaunch": true,
-        "Tags": Array [
-          Object {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "ingress",
-          },
-          Object {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Public",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Target/Vpc/ingressSubnet3",
           },
         ],
         "VpcId": Object {
@@ -636,7 +217,7 @@ Object {
     "VpcrdsSubnet1SubnetC2926CEA": Object {
       "Properties": Object {
         "AvailabilityZone": "dummy1a",
-        "CidrBlock": "10.0.6.0/28",
+        "CidrBlock": "10.0.2.0/28",
         "MapPublicIpOnLaunch": false,
         "Tags": Array [
           Object {
@@ -686,7 +267,7 @@ Object {
     "VpcrdsSubnet2Subnet70A835C8": Object {
       "Properties": Object {
         "AvailabilityZone": "dummy1b",
-        "CidrBlock": "10.0.6.16/28",
+        "CidrBlock": "10.0.2.16/28",
         "MapPublicIpOnLaunch": false,
         "Tags": Array [
           Object {
@@ -700,56 +281,6 @@ Object {
           Object {
             "Key": "Name",
             "Value": "Target/Vpc/rdsSubnet2",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::Subnet",
-    },
-    "VpcrdsSubnet3RouteTable75EBAB28": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "Target/Vpc/rdsSubnet3",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::RouteTable",
-    },
-    "VpcrdsSubnet3RouteTableAssociation1C0CEC6A": Object {
-      "Properties": Object {
-        "RouteTableId": Object {
-          "Ref": "VpcrdsSubnet3RouteTable75EBAB28",
-        },
-        "SubnetId": Object {
-          "Ref": "VpcrdsSubnet3SubnetAA566B5A",
-        },
-      },
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-    },
-    "VpcrdsSubnet3SubnetAA566B5A": Object {
-      "Properties": Object {
-        "AvailabilityZone": "dummy1c",
-        "CidrBlock": "10.0.6.32/28",
-        "MapPublicIpOnLaunch": false,
-        "Tags": Array [
-          Object {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "rds",
-          },
-          Object {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Isolated",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Target/Vpc/rdsSubnet3",
           },
         ],
         "VpcId": Object {

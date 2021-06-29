@@ -89,10 +89,10 @@ Object {
           ],
           "SubnetIds": Array [
             Object {
-              "Fn::ImportValue": "dummyStack:ExportsOutputRefVpcPrivateSubnet1Subnet536B997AFD4CC940",
+              "Fn::ImportValue": "dummyStack:ExportsOutputRefVpcapplicationSubnet1Subnet8B68205B1F66BB2C",
             },
             Object {
-              "Fn::ImportValue": "dummyStack:ExportsOutputRefVpcPrivateSubnet2Subnet3788AAA1380949A3",
+              "Fn::ImportValue": "dummyStack:ExportsOutputRefVpcapplicationSubnet2Subnet296709622ABA6FC7",
             },
           ],
         },

@@ -57,7 +57,7 @@ Object {
           "S3Bucket": Object {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "6f35d659e3253e19cd78904d5b2403e0e4e8e4d4df338ad1e4cdd9027b9286af.zip",
+          "S3Key": "e1bcad859b48e8247fca090eca703c911ba2ba2dfdc415c5afed17b60c2ba246.zip",
         },
         "Environment": Object {
           "Variables": Object {
@@ -120,6 +120,9 @@ Object {
           },
         },
         "Handler": "index.handler",
+        "Layers": Array [
+          "arn:aws:lambda:ap-northeast-1:580247275435:layer:LambdaInsightsExtension:14",
+        ],
         "Role": Object {
           "Fn::GetAtt": Array [
             "LambdaServiceRoleA8ED4D3B",
@@ -136,10 +139,10 @@ Object {
           ],
           "SubnetIds": Array [
             Object {
-              "Fn::ImportValue": "dummyStack:ExportsOutputRefVpcPrivateSubnet1Subnet536B997AFD4CC940",
+              "Fn::ImportValue": "dummyStack:ExportsOutputRefVpcapplicationSubnet1Subnet8B68205B1F66BB2C",
             },
             Object {
-              "Fn::ImportValue": "dummyStack:ExportsOutputRefVpcPrivateSubnet2Subnet3788AAA1380949A3",
+              "Fn::ImportValue": "dummyStack:ExportsOutputRefVpcapplicationSubnet2Subnet296709622ABA6FC7",
             },
           ],
         },
@@ -529,6 +532,18 @@ Object {
                   "Ref": "AWS::Partition",
                 },
                 ":iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole",
+              ],
+            ],
+          },
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy",
               ],
             ],
           },

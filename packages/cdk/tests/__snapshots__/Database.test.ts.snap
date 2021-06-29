@@ -106,6 +106,15 @@ Object {
           Object {
             "Fn::ImportValue": "dummyStack:ExportsOutputRefVpcapplicationSubnet3SubnetB937EB65D0FA57B0",
           },
+          Object {
+            "Fn::ImportValue": "dummyStack:ExportsOutputRefVpcrdsSubnet1SubnetC2926CEA415B78A7",
+          },
+          Object {
+            "Fn::ImportValue": "dummyStack:ExportsOutputRefVpcrdsSubnet2Subnet70A835C80F5EB08B",
+          },
+          Object {
+            "Fn::ImportValue": "dummyStack:ExportsOutputRefVpcrdsSubnet3SubnetAA566B5A902489E7",
+          },
         ],
       },
       "Type": "AWS::RDS::DBProxy",

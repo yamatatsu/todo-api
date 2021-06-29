@@ -14,8 +14,7 @@ test("snapshot test", () => {
 
   const vpc = new aws_ec2.Vpc(stack, "Vpc", {
     subnetConfiguration: [
-      { name: "ingress", subnetType: aws_ec2.SubnetType.PUBLIC },
-      { name: "application", subnetType: aws_ec2.SubnetType.PRIVATE },
+      { name: "application", subnetType: aws_ec2.SubnetType.ISOLATED },
       { name: "rds", subnetType: aws_ec2.SubnetType.ISOLATED },
     ],
   });
