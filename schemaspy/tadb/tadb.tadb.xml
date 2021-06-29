@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<database name="tadb" schema="tadb" type="MySQL - 5.5.5-10.5.11-MariaDB-1:10.5.11+maria~focal">
+   <tables>
+      <table catalog="tadb" name="_prisma_migrations" numRows="3" remarks="" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="checksum" nullable="false" remarks="" size="64" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="finished_at" nullable="true" remarks="" size="26" type="DATETIME" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="migration_name" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="logs" nullable="true" remarks="" size="65535" type="TEXT" typeCode="-1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="rolled_back_at" nullable="true" remarks="" size="26" type="DATETIME" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="current_timestamp(3)" digits="0" id="6" name="started_at" nullable="false" remarks="" size="26" type="DATETIME" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="7" name="applied_steps_count" nullable="false" remarks="" size="10" type="INT UNSIGNED" typeCode="4"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table catalog="tadb" name="Board" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="INT" typeCode="4">
+            <child catalog="tadb" column="boardId" foreignKey="Task_ibfk_1" implied="false" onDeleteCascade="true" table="Task"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="title" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="description" nullable="true" remarks="" size="191" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="authorId" nullable="false" remarks="" size="10" type="INT" typeCode="4">
+            <parent catalog="tadb" column="id" foreignKey="Board_ibfk_1" implied="false" onDeleteCascade="true" table="User"/>
+         </column>
+         <column autoUpdated="false" defaultValue="current_timestamp(3)" digits="0" id="4" name="createdAt" nullable="false" remarks="" size="26" type="DATETIME" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="updatedAt" nullable="false" remarks="" size="26" type="DATETIME" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="authorId" unique="false">
+            <column ascending="true" name="authorId"/>
+         </index>
+      </table>
+      <table catalog="tadb" name="Task" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="INT" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="title" nullable="false" remarks="" size="255" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="description" nullable="true" remarks="" size="191" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="boardId" nullable="false" remarks="" size="10" type="INT" typeCode="4">
+            <parent catalog="tadb" column="id" foreignKey="Task_ibfk_1" implied="false" onDeleteCascade="true" table="Board"/>
+         </column>
+         <column autoUpdated="false" defaultValue="current_timestamp(3)" digits="0" id="4" name="createdAt" nullable="false" remarks="" size="26" type="DATETIME" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="updatedAt" nullable="false" remarks="" size="26" type="DATETIME" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="6" name="finished" nullable="false" remarks="" size="1" type="BIT" typeCode="-7"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="boardId" unique="false">
+            <column ascending="true" name="boardId"/>
+         </index>
+      </table>
+      <table catalog="tadb" name="User" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="true" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="INT" typeCode="4">
+            <child catalog="tadb" column="authorId" foreignKey="Board_ibfk_1" implied="false" onDeleteCascade="true" table="Board"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="sub" nullable="false" remarks="" size="191" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="name" nullable="false" remarks="" size="191" type="VARCHAR" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="current_timestamp(3)" digits="0" id="3" name="createdAt" nullable="false" remarks="" size="26" type="DATETIME" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="current_timestamp(3)" digits="0" id="4" name="updatedAt" nullable="false" remarks="" size="26" type="DATETIME" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="User.sub_unique" unique="true">
+            <column ascending="true" name="sub"/>
+         </index>
+      </table>
+   </tables>
+</database>

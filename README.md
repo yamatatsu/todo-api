@@ -14,7 +14,13 @@
 
 ### ER 図
 
-TBD
+![ER](./schemaspy/tadb/diagrams/summary/relationships.real.large.png)
+
+更新するときは以下を実行する
+
+```sh
+docker run -v $PWD/schemaspy:/output --net=host schemaspy/schemaspy:6.1.0 -t mysql -host localhost:53306 -db tadb -u tauser -p password -connprops useSSL\\\\=false -all
+```
 
 ### CRUD
 
