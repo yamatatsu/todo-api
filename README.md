@@ -89,7 +89,7 @@ docker run -v $PWD/schemaspy:/output --net=host schemaspy/schemaspy:6.1.0 -t mys
      - [ ] エラーレスポンスの統一
      - [ ] エラーレスポンスの文書化
    - 実装の見直し
-     - [ ] トランザクション見直し
+     - [x] トランザクション見直し
    - 運用
      - [ ] ログ設計
      - [x] nat 落とす
