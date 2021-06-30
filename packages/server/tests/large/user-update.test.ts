@@ -96,3 +96,22 @@ test("有効文字チェックエラーとなること", async () => {
     ],
   });
 });
+
+test("`<`と`>`がサニタイズされること", async () => {
+  const { user } = await createUser1(prisma);
+
+  const body = {
+    name: `<><>`,
+  };
+  const res = await request(createApp())
+    .put(`/user`)
+    .send(body)
+    .set("x-apigateway-event", getXApigatewayEvent(user.sub))
+    .set("x-apigateway-context", "{}");
+
+  expect(res.status).toEqual(200);
+
+  const { name } =
+    (await prisma.user.findUnique({ where: { id: user.id } })) ?? {};
+  expect(name).toBe("&lt;&gt;&lt;&gt;");
+});

@@ -145,3 +145,28 @@ test("有効文字チェックエラーとなること", async () => {
     ],
   });
 });
+
+test("`<`と`>`がサニタイズされること", async () => {
+  const { user, board, tasks } = await createUser1(prisma);
+
+  const body = {
+    title: "<><>",
+    description: "<><>",
+  };
+  const res = await request(createApp())
+    .post(`/board/${board.id}/task`)
+    .send(body)
+    .set("x-apigateway-event", getXApigatewayEvent(user.sub))
+    .set("x-apigateway-context", "{}");
+
+  expect(res.status).toEqual(200);
+
+  const { title, description } =
+    (await prisma.task.findFirst({
+      where: { boardId: board.id, id: { notIn: tasks.map((t) => t.id) } },
+    })) ?? {};
+  expect({ title, description }).toEqual({
+    title: "&lt;&gt;&lt;&gt;",
+    description: "&lt;&gt;&lt;&gt;",
+  });
+});

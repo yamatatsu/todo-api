@@ -61,15 +61,13 @@ test("Unique制約エラーとなること", async () => {
 });
 
 test("文字数チェックエラーとなること", async () => {
-  const { user } = await createUser1(prisma);
-
   const body = {
     name: "--------10--------20--------30--------40--------50--------60-",
   };
   const res = await request(createApp())
     .post("/user")
     .send(body)
-    .set("x-apigateway-event", getXApigatewayEvent(user.sub))
+    .set("x-apigateway-event", getXApigatewayEvent(sampleUuid))
     .set("x-apigateway-context", "{}");
 
   expect(res.status).toEqual(400);
@@ -88,15 +86,13 @@ test("文字数チェックエラーとなること", async () => {
 });
 
 test("有効文字チェックエラーとなること", async () => {
-  const { user } = await createUser1(prisma);
-
   const body = {
     name: `hoge\nhoge`,
   };
   const res = await request(createApp())
     .post("/user")
     .send(body)
-    .set("x-apigateway-event", getXApigatewayEvent(user.sub))
+    .set("x-apigateway-event", getXApigatewayEvent(sampleUuid))
     .set("x-apigateway-context", "{}");
 
   expect(res.status).toEqual(400);
@@ -110,4 +106,20 @@ test("有効文字チェックエラーとなること", async () => {
       },
     ],
   });
+});
+
+test("`<`と`>`がサニタイズされること", async () => {
+  const body = {
+    name: `<><>`,
+  };
+  const res = await request(createApp())
+    .post("/user")
+    .send(body)
+    .set("x-apigateway-event", getXApigatewayEvent(sampleUuid))
+    .set("x-apigateway-context", "{}");
+
+  expect(res.status).toEqual(200);
+
+  const { name } = (await prisma.user.findFirst()) ?? {};
+  expect(name).toBe("&lt;&gt;&lt;&gt;");
 });

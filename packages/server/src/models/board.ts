@@ -5,8 +5,12 @@ const titleSchema = zod
   .string()
   .max(50)
   // 改行を許容しない
-  .regex(/^[^\n]*$/);
-const descriptionSchema = zod.string().max(500);
+  .regex(/^[^\n]*$/)
+  .transform((name) => name.replace(/</g, "&lt;").replace(/>/g, "&gt;"));
+const descriptionSchema = zod
+  .string()
+  .max(500)
+  .transform((name) => name.replace(/</g, "&lt;").replace(/>/g, "&gt;"));
 
 export const schemaForCreate = zod.object({
   authorId: authorIdSchema,

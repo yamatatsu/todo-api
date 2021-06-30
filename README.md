@@ -84,7 +84,6 @@ docker run -v $PWD/schemaspy:/output --net=host schemaspy/schemaspy:6.1.0 -t mys
      - [x] 入力チェック見直し
        - 最大文字数
        - 有効文字
-     - [ ] 入力チェック見直し 2
        - サニタイズ
      - [x] テスト: status の expext を追加
      - [ ] エラーレスポンスの統一
