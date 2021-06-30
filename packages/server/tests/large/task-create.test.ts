@@ -1,6 +1,11 @@
 import request from "supertest";
 import createApp from "../../src/app";
-import { setupPrisma, getXApigatewayEvent, createUser1 } from "./helper";
+import {
+  setupPrisma,
+  getXApigatewayEvent,
+  createUser1,
+  createUser2,
+} from "./helper";
 
 const prisma = setupPrisma();
 
@@ -169,4 +174,18 @@ test("`<`と`>`がサニタイズされること", async () => {
     title: "&lt;&gt;&lt;&gt;",
     description: "&lt;&gt;&lt;&gt;",
   });
+});
+
+test("他人のBoardにはTaskが作成できないこと", async () => {
+  const { user, board } = await createUser1(prisma);
+  const { user: user2 } = await createUser2(prisma);
+
+  const body = { title: "test-title", description: "test-description" };
+  const res = await request(createApp())
+    .post(`/board/${board.id}/task`)
+    .send(body)
+    .set("x-apigateway-event", getXApigatewayEvent(user2.sub))
+    .set("x-apigateway-context", "{}");
+
+  expect(res.status).toEqual(404);
 });

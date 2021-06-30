@@ -1,6 +1,11 @@
 import request from "supertest";
 import createApp from "../../src/app";
-import { setupPrisma, getXApigatewayEvent, createUser1 } from "./helper";
+import {
+  setupPrisma,
+  getXApigatewayEvent,
+  createUser1,
+  createUser2,
+} from "./helper";
 
 const prisma = setupPrisma();
 
@@ -210,4 +215,46 @@ test("`<`と`>`がサニタイズされること", async () => {
     title: "&lt;&gt;&lt;&gt;",
     description: "&lt;&gt;&lt;&gt;",
   });
+});
+
+test("他人のTaskが更新できないこと", async () => {
+  const {
+    user,
+    board,
+    tasks: [task],
+  } = await createUser1(prisma);
+  const { user: user2 } = await createUser2(prisma);
+
+  const body = {
+    title: "test-task-title:updated",
+    description: "test-task-description:updated",
+  };
+  const res = await request(createApp())
+    .put(`/board/${board.id}/task/${task.id}`)
+    .send(body)
+    .set("x-apigateway-event", getXApigatewayEvent(user2.sub))
+    .set("x-apigateway-context", "{}");
+
+  expect(res.status).toEqual(404);
+});
+
+test("Boardに存在しないTaskが更新できないこと", async () => {
+  const {
+    user,
+    board,
+    board2,
+    tasks: [task],
+  } = await createUser1(prisma);
+
+  const body = {
+    title: "test-task-title:updated",
+    description: "test-task-description:updated",
+  };
+  const res = await request(createApp())
+    .put(`/board/${board2.id}/task/${task.id}`)
+    .send(body)
+    .set("x-apigateway-event", getXApigatewayEvent(user.sub))
+    .set("x-apigateway-context", "{}");
+
+  expect(res.status).toEqual(404);
 });

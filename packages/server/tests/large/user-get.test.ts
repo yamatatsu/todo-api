@@ -7,7 +7,7 @@ const prisma = setupPrisma();
 jest.retryTimes(2);
 
 test("単一のユーザーが取得できること", async () => {
-  const { user, board } = await createUser1(prisma);
+  const { user, board, board2 } = await createUser1(prisma);
 
   const res = await request(createApp())
     .get(`/user`)
@@ -22,6 +22,11 @@ test("単一のユーザーが取得できること", async () => {
     boards: [
       {
         ...board,
+        createdAt: expect.any(String),
+        updatedAt: expect.any(String),
+      },
+      {
+        ...board2,
         createdAt: expect.any(String),
         updatedAt: expect.any(String),
       },

@@ -1,6 +1,11 @@
 import request from "supertest";
 import createApp from "../../src/app";
-import { createUser1, getXApigatewayEvent, setupPrisma } from "./helper";
+import {
+  createUser1,
+  createUser2,
+  getXApigatewayEvent,
+  setupPrisma,
+} from "./helper";
 
 const prisma = setupPrisma();
 
@@ -160,6 +165,27 @@ test("Userが存在しない場合、404エラーとなること", async () => {
   const res = await request(createApp())
     .get(`/board/${board.id}/tasks`)
     .set("x-apigateway-event", getXApigatewayEvent("dummy-sub"))
+    .set("x-apigateway-context", "{}");
+
+  expect(res.status).toEqual(404);
+});
+
+test("他人のboardのTaskが取得できないこと", async () => {
+  const { user, board } = await createUser1(prisma);
+  const { user: user2 } = await createUser2(prisma);
+
+  await prisma.board.create({
+    data: {
+      authorId: user.id,
+      title: "test-board-title2",
+      tasks: { create: [{ title: "test-task-title3" }] },
+    },
+    include: { tasks: true },
+  });
+
+  const res = await request(createApp())
+    .get(`/board/${board.id}/tasks`)
+    .set("x-apigateway-event", getXApigatewayEvent(user2.sub))
     .set("x-apigateway-context", "{}");
 
   expect(res.status).toEqual(404);

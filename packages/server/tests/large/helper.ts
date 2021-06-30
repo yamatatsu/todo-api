@@ -29,6 +29,7 @@ export const getXApigatewayEvent = (sub: string) =>
   });
 
 export const sampleUuid = "ccb4e9ba-ce25-410f-bfbe-7cd55cc09a57";
+export const sampleUuid2 = "ccb4e9ba-ce25-410f-bfbe-7cd55cc09a58";
 
 export const createUser1 = async (prisma: PrismaClient) => {
   const user = await prisma.user.create({
@@ -36,37 +37,56 @@ export const createUser1 = async (prisma: PrismaClient) => {
       sub: sampleUuid,
       name: "test-user-name1",
       boards: {
-        create: {
-          title: "test-board-title1",
-          tasks: {
-            create: [
-              {
-                title: "りんご いちご ぶどう",
-                description: "りんご ばなな ぶどう",
-              },
-              {
-                title: "りんご ばなな ぶどう",
-                description: "りんご ばなな ぶどう",
-              },
-              {
-                title: "りんご ばなな ぶどう",
-                description: "りんご いちご ぶどう",
-              },
-            ],
+        create: [
+          {
+            title: "test-board-title1",
+            tasks: {
+              create: [
+                {
+                  title: "りんご いちご ぶどう",
+                  description: "りんご ばなな ぶどう",
+                },
+                {
+                  title: "りんご ばなな ぶどう",
+                  description: "りんご ばなな ぶどう",
+                },
+                {
+                  title: "りんご ばなな ぶどう",
+                  description: "りんご いちご ぶどう",
+                },
+              ],
+            },
           },
-        },
+          {
+            title: "test-board-title2",
+          },
+        ],
       },
     },
     include: { boards: { include: { tasks: true } } },
   });
 
   const board = user.boards[0];
+  const board2 = user.boards[1];
   const tasks = board.tasks;
 
   return {
     user: omit(user, ["boards"]),
     board: omit(board, ["tasks"]),
     tasks,
+    board2: omit(board2, ["tasks"]),
+  };
+};
+
+export const createUser2 = async (prisma: PrismaClient) => {
+  const user = await prisma.user.create({
+    data: {
+      sub: sampleUuid2,
+      name: "test-user-name2",
+    },
+  });
+  return {
+    user,
   };
 };
 

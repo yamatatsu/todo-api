@@ -119,7 +119,7 @@ test("有効文字チェックエラーとなること", async () => {
 });
 
 test("`<`と`>`がサニタイズされること", async () => {
-  const { user, board } = await createUser1(prisma);
+  const { user, board, board2 } = await createUser1(prisma);
 
   const body = {
     title: "<><>",
@@ -135,7 +135,7 @@ test("`<`と`>`がサニタイズされること", async () => {
 
   const { title, description } =
     (await prisma.board.findFirst({
-      where: { authorId: user.id, id: { not: board.id } },
+      where: { authorId: user.id, id: { notIn: [board.id, board2.id] } },
     })) ?? {};
   expect({ title, description }).toEqual({
     title: "&lt;&gt;&lt;&gt;",
