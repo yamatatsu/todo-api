@@ -105,6 +105,7 @@ docker run -v $PWD/schemaspy:/output --net=host schemaspy/schemaspy:6.1.0 -t mys
      - [ ] use https://middy.js.org/
    - 機能
      - [x] done API
+     - [x] 検索強化
      - [ ] 変更履歴
      - [ ] 楽観ロック
      - [ ] init via Cognito Sign Up

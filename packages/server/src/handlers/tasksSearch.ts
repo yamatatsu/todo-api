@@ -5,6 +5,19 @@ import { getSub, getBoardParams } from "./lib";
 
 const querySchema = zod.object({
   keyword: zod.string().optional(),
+  finished: zod
+    .string()
+    .transform((finished) => {
+      switch (finished.toLowerCase()) {
+        case "true":
+          return true;
+        case "false":
+          return false;
+        default:
+          return Boolean(finished);
+      }
+    })
+    .optional(),
 });
 
 const handler: Handler = async (req, res) => {
@@ -19,13 +32,6 @@ const handler: Handler = async (req, res) => {
     return;
   }
 
-  const queryValidationReslt = querySchema.safeParse(req.query);
-  if (!queryValidationReslt.success) {
-    res.status(400).json(queryValidationReslt.error);
-    return;
-  }
-  const { keyword } = queryValidationReslt.data;
-
   const prisma = await getPrisma();
   const board = await prisma.board.findFirst({
     where: { id: params.boardId, author: { sub } },
@@ -36,7 +42,14 @@ const handler: Handler = async (req, res) => {
     return;
   }
 
-  const searchQuery = keyword
+  const queryValidationReslt = querySchema.safeParse(req.query);
+  if (!queryValidationReslt.success) {
+    res.status(400).json(queryValidationReslt.error);
+    return;
+  }
+  const { keyword, finished = false } = queryValidationReslt.data;
+
+  const keywordQuery = keyword
     ? {
         OR: [
           { title: { contains: keyword } },
@@ -48,7 +61,8 @@ const handler: Handler = async (req, res) => {
   const tasks = await prisma.task.findMany({
     where: {
       boardId: board.id,
-      ...searchQuery,
+      finished,
+      ...keywordQuery,
     },
   });
 

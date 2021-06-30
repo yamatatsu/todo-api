@@ -54,11 +54,22 @@ export const createUser1 = async (prisma: PrismaClient) => {
                   title: "りんご ばなな ぶどう",
                   description: "りんご いちご ぶどう",
                 },
+                {
+                  title: "DONEしたtask",
+                  description: "DONEしたtask",
+                  finished: true,
+                },
+                {
+                  title: "DONEしたtask",
+                  description: "DONEしたtask 検索用キー:わかめ",
+                  finished: true,
+                },
               ],
             },
           },
           {
             title: "test-board-title2",
+            tasks: { create: [{ title: "よそのBoardのタスク" }] },
           },
         ],
       },
