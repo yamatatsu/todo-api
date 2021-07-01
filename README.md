@@ -1,5 +1,38 @@
 # todo-api
 
+## 概要
+
+TODO アプリ用の API サーバーを作成した。サーバーレス構成で DB には RDS を使用した。
+
+### インフラ
+
+API Gateway(REST API), Lambda, RDS Aurora(MySQL), Cognito, CDK
+
+AWS 環境は AWS CDK を利用して、検証環境=>本番環境の再現性を担保した。
+
+lambda からインターネットにアウトバウンドする要件はなかったので NAT は作成せず、Public Subnet も消した。
+
+RDB のマイグレーションは lambda 越しに行うことで ssh や system manager session manager を使わずに CLI コマンドのみで行えるようにした。  
+（CD として組み込むのは未達）
+
+API Gateway に Cognito UserPool Authorizer を付けて API の認証を実装した。
+
+### アプリケーション
+
+Node, Express, Prisma, Jest, supertest
+
+aws-serverless-lambda を用いて Express を lambda 上で実行した。  
+のちに middy の存在を知ったが実装には至らなかった。
+
+Prisma を使用して DB 接続した。  
+DATABASE_URL は secret manager に格納した情報から作成する必要があったため、lambda のランタイム上で AWS SDK で取得した情報をもとに DATABASE_URL を作成した。
+
+データテーブルとして、User, Board, Task の 3 つを用意した。  
+Board は User と Task のマッピング用の概念として、あとから導入するとハレーションが大きいと考えたため、導入した。BoardMenber のようなテーブルを導入することで、タスクを User 間で共有できるようになる想定である。
+
+Task の検索は RDB の機能の範囲で済ませた。  
+作者自身に全文検索エンジンに関する知見が足らず、導入を見送った。
+
 ## 各種手順
 
 - [ローカル環境のセットアップ](./docs/setup-local.md)
