@@ -80,7 +80,7 @@ docker run -v $PWD/schemaspy:/output --net=host schemaspy/schemaspy:6.1.0 -t mys
    - [x] simulator の整備
    - [x] インフラ構築動作確認の手順
    - [x] [setup-local](./docs/setup-local.md)が多分足りてない。やってみる。
-   - [ ] DB Index
+   - [x] DB Index
    - API インターフェースの見直しと文書化
      - [x] 入力チェック見直し
        - 最大文字数

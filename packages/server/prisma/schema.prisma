@@ -41,4 +41,5 @@ model Task {
   board       Board    @relation(fields: [boardId], references: [id])
 
   @@index([boardId], name: "boardId")
+  @@index(fields: [title, description], name: "keyword_index")
 }
