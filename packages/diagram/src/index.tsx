@@ -3,7 +3,6 @@ import { PNG, Diagram, GeneralIcon } from "rediagram";
 import {
   AWS,
   InvizAWS,
-  EC2,
   Lambda,
   VPC,
   RDS,
@@ -18,18 +17,15 @@ PNG(
       <AWS>
         <VPC>
           <VPC type="Private subnet">
-            <Lambda
-              name="Express Server"
-              upstream={["MySQL", "Secrets for RDS"]}
-            />
-            <Lambda name="Migrater" upstream={["MySQL", "Secrets for RDS"]} />
-          </VPC>
-          <VPC type="Private subnet">
-            <RDS name="MySQL" type="Aurora" />
+            <RDS name="Aurora\nServerless" type="Aurora" />
           </VPC>
         </VPC>
+        <Lambda
+          name="Lambda"
+          upstream={["Aurora\nServerless", "Secrets for RDS"]}
+        />
         <SecretsManager name="Secrets for RDS" />
-        <APIGateway name="REST API" upstream={["Express Server"]} />
+        <APIGateway name="REST API" upstream={["Lambda"]} />
         <Cognito name="UserPool" />
       </AWS>
       <GeneralIcon
