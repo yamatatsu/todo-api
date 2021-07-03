@@ -9,20 +9,7 @@ export class VpcStack extends Stack {
     const vpc = new aws_ec2.Vpc(this, "Vpc", {
       natGateways: 0,
       maxAzs: 2,
-      // natGatewayProvider: aws_ec2.NatInstanceProvider.instance({
-      //   instanceType: new aws_ec2.InstanceType("t2.nano"),
-      // }),
       subnetConfiguration: [
-        // {
-        //   cidrMask: 24,
-        //   name: "ingress",
-        //   subnetType: aws_ec2.SubnetType.PUBLIC,
-        // },
-        {
-          cidrMask: 24,
-          name: "application",
-          subnetType: aws_ec2.SubnetType.ISOLATED,
-        },
         {
           cidrMask: 28,
           name: "rds",

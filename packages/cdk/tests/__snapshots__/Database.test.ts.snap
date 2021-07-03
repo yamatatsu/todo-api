@@ -3,31 +3,35 @@
 exports[`snapshot test 1`] = `
 Object {
   "Resources": Object {
-    "Aurora2CBAB212": Object {
+    "ServerlessClusterD09D5D78": Object {
       "DeletionPolicy": "Delete",
       "Properties": Object {
+        "DBClusterParameterGroupName": "default.aurora-mysql5.7",
         "DBSubnetGroupName": Object {
-          "Ref": "AuroraSubnetsC4DF45C9",
+          "Ref": "ServerlessClusterSubnetsEB21A3DA",
         },
         "DatabaseName": "tadb",
-        "Engine": "aurora",
+        "EnableHttpEndpoint": true,
+        "Engine": "aurora-mysql",
+        "EngineMode": "serverless",
         "MasterUserPassword": Object {
           "Fn::Join": Array [
             "",
             Array [
               "{{resolve:secretsmanager:",
               Object {
-                "Ref": "TargetAuroraSecret852055C73fdaad7efa858a3daf9490cf0a702aeb",
+                "Ref": "TargetServerlessClusterSecret5551F7763fdaad7efa858a3daf9490cf0a702aeb",
               },
               ":SecretString:password::}}",
             ],
           ],
         },
         "MasterUsername": "dbAdmin",
+        "StorageEncrypted": true,
         "VpcSecurityGroupIds": Array [
           Object {
             "Fn::GetAtt": Array [
-              "DBSG9487F3EF",
+              "ServerlessClusterSecurityGroup24DEA47D",
               "GroupId",
             ],
           },
@@ -36,173 +40,37 @@ Object {
       "Type": "AWS::RDS::DBCluster",
       "UpdateReplacePolicy": "Delete",
     },
-    "AuroraInstance10510C5D1": Object {
-      "DeletionPolicy": "Delete",
-      "Properties": Object {
-        "DBClusterIdentifier": Object {
-          "Ref": "Aurora2CBAB212",
-        },
-        "DBInstanceClass": "db.t3.medium",
-        "DBSubnetGroupName": Object {
-          "Ref": "AuroraSubnetsC4DF45C9",
-        },
-        "Engine": "aurora",
-        "PubliclyAccessible": false,
-      },
-      "Type": "AWS::RDS::DBInstance",
-      "UpdateReplacePolicy": "Delete",
-    },
-    "AuroraInstance2BC8C1D03": Object {
-      "DeletionPolicy": "Delete",
-      "Properties": Object {
-        "DBClusterIdentifier": Object {
-          "Ref": "Aurora2CBAB212",
-        },
-        "DBInstanceClass": "db.t3.medium",
-        "DBSubnetGroupName": Object {
-          "Ref": "AuroraSubnetsC4DF45C9",
-        },
-        "Engine": "aurora",
-        "PubliclyAccessible": false,
-      },
-      "Type": "AWS::RDS::DBInstance",
-      "UpdateReplacePolicy": "Delete",
-    },
-    "AuroraRdsProxyB8FEFA0E": Object {
-      "Properties": Object {
-        "Auth": Array [
-          Object {
-            "AuthScheme": "SECRETS",
-            "IAMAuth": "DISABLED",
-            "SecretArn": Object {
-              "Ref": "AuroraSecretAttachmentEAAB0558",
-            },
-          },
-        ],
-        "DBProxyName": "RdsProxy",
-        "EngineFamily": "MYSQL",
-        "RequireTLS": false,
-        "RoleArn": Object {
-          "Fn::GetAtt": Array [
-            "AuroraRdsProxyIAMRole6EFC0823",
-            "Arn",
-          ],
-        },
-        "VpcSecurityGroupIds": Array [
-          Object {
-            "Fn::GetAtt": Array [
-              "DBSG9487F3EF",
-              "GroupId",
-            ],
-          },
-        ],
-        "VpcSubnetIds": Array [
-          Object {
-            "Fn::ImportValue": "dummyStack:ExportsOutputRefVpcapplicationSubnet1Subnet8B68205B1F66BB2C",
-          },
-          Object {
-            "Fn::ImportValue": "dummyStack:ExportsOutputRefVpcapplicationSubnet2Subnet296709622ABA6FC7",
-          },
-          Object {
-            "Fn::ImportValue": "dummyStack:ExportsOutputRefVpcapplicationSubnet3SubnetB937EB65D0FA57B0",
-          },
-          Object {
-            "Fn::ImportValue": "dummyStack:ExportsOutputRefVpcrdsSubnet1SubnetC2926CEA415B78A7",
-          },
-          Object {
-            "Fn::ImportValue": "dummyStack:ExportsOutputRefVpcrdsSubnet2Subnet70A835C80F5EB08B",
-          },
-          Object {
-            "Fn::ImportValue": "dummyStack:ExportsOutputRefVpcrdsSubnet3SubnetAA566B5A902489E7",
-          },
-        ],
-      },
-      "Type": "AWS::RDS::DBProxy",
-    },
-    "AuroraRdsProxyIAMRole6EFC0823": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": "rds.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "AuroraRdsProxyIAMRoleDefaultPolicy221FE317": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "secretsmanager:GetSecretValue",
-                "secretsmanager:DescribeSecret",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Ref": "AuroraSecretAttachmentEAAB0558",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "AuroraRdsProxyIAMRoleDefaultPolicy221FE317",
-        "Roles": Array [
-          Object {
-            "Ref": "AuroraRdsProxyIAMRole6EFC0823",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "AuroraRdsProxyProxyTargetGroup475E511C": Object {
-      "DependsOn": Array [
-        "AuroraInstance10510C5D1",
-        "AuroraInstance2BC8C1D03",
-        "AuroraRdsProxyIAMRoleDefaultPolicy221FE317",
-        "AuroraRdsProxyIAMRole6EFC0823",
-        "AuroraRdsProxyB8FEFA0E",
-        "Aurora2CBAB212",
-        "AuroraSecretAttachmentEAAB0558",
-        "TargetAuroraSecret852055C73fdaad7efa858a3daf9490cf0a702aeb",
-        "AuroraSubnetsC4DF45C9",
-      ],
-      "Properties": Object {
-        "ConnectionPoolConfigurationInfo": Object {},
-        "DBClusterIdentifiers": Array [
-          Object {
-            "Ref": "Aurora2CBAB212",
-          },
-        ],
-        "DBProxyName": Object {
-          "Ref": "AuroraRdsProxyB8FEFA0E",
-        },
-        "TargetGroupName": "default",
-      },
-      "Type": "AWS::RDS::DBProxyTargetGroup",
-    },
-    "AuroraSecretAttachmentEAAB0558": Object {
+    "ServerlessClusterSecretAttachment79618777": Object {
       "Properties": Object {
         "SecretId": Object {
-          "Ref": "TargetAuroraSecret852055C73fdaad7efa858a3daf9490cf0a702aeb",
+          "Ref": "TargetServerlessClusterSecret5551F7763fdaad7efa858a3daf9490cf0a702aeb",
         },
         "TargetId": Object {
-          "Ref": "Aurora2CBAB212",
+          "Ref": "ServerlessClusterD09D5D78",
         },
         "TargetType": "AWS::RDS::DBCluster",
       },
       "Type": "AWS::SecretsManager::SecretTargetAttachment",
     },
-    "AuroraSubnetsC4DF45C9": Object {
+    "ServerlessClusterSecurityGroup24DEA47D": Object {
       "Properties": Object {
-        "DBSubnetGroupDescription": "Subnets for Aurora database",
+        "GroupDescription": "RDS security group",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "VpcId": Object {
+          "Fn::ImportValue": "dummyStack:ExportsOutputRefVpc8378EB38272D6E3A",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "ServerlessClusterSubnetsEB21A3DA": Object {
+      "Properties": Object {
+        "DBSubnetGroupDescription": "Subnets for ServerlessCluster database",
         "SubnetIds": Array [
           Object {
             "Fn::ImportValue": "dummyStack:ExportsOutputRefVpcrdsSubnet1SubnetC2926CEA415B78A7",
@@ -217,127 +85,7 @@ Object {
       },
       "Type": "AWS::RDS::DBSubnetGroup",
     },
-    "DBAccessSGBB77343E": Object {
-      "Properties": Object {
-        "GroupDescription": "for accessing database",
-        "GroupName": "Database Access",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "VpcId": Object {
-          "Fn::ImportValue": "dummyStack:ExportsOutputRefVpc8378EB38272D6E3A",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "DBSG9487F3EF": Object {
-      "Properties": Object {
-        "GroupDescription": "for database",
-        "GroupName": "Database",
-        "VpcId": Object {
-          "Fn::ImportValue": "dummyStack:ExportsOutputRefVpc8378EB38272D6E3A",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "DBSGfromTargetDBAccessSGA573EF9C33062F29BB9A": Object {
-      "Properties": Object {
-        "Description": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "from application with sg named ",
-              Object {
-                "Ref": "DBAccessSGBB77343E",
-              },
-            ],
-          ],
-        },
-        "FromPort": 3306,
-        "GroupId": Object {
-          "Fn::GetAtt": Array [
-            "DBSG9487F3EF",
-            "GroupId",
-          ],
-        },
-        "IpProtocol": "tcp",
-        "SourceSecurityGroupId": Object {
-          "Fn::GetAtt": Array [
-            "DBAccessSGBB77343E",
-            "GroupId",
-          ],
-        },
-        "ToPort": 3306,
-      },
-      "Type": "AWS::EC2::SecurityGroupIngress",
-    },
-    "DBSGfromTargetDBSG2D7B6556IndirectPort60B97122": Object {
-      "Properties": Object {
-        "Description": "Allow connections to the database Cluster from the Proxy",
-        "FromPort": Object {
-          "Fn::GetAtt": Array [
-            "Aurora2CBAB212",
-            "Endpoint.Port",
-          ],
-        },
-        "GroupId": Object {
-          "Fn::GetAtt": Array [
-            "DBSG9487F3EF",
-            "GroupId",
-          ],
-        },
-        "IpProtocol": "tcp",
-        "SourceSecurityGroupId": Object {
-          "Fn::GetAtt": Array [
-            "DBSG9487F3EF",
-            "GroupId",
-          ],
-        },
-        "ToPort": Object {
-          "Fn::GetAtt": Array [
-            "Aurora2CBAB212",
-            "Endpoint.Port",
-          ],
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroupIngress",
-    },
-    "DBSGtoTargetDBSG2D7B6556IndirectPortCDBCE918": Object {
-      "Properties": Object {
-        "Description": "Allow connections to the database Cluster from the Proxy",
-        "DestinationSecurityGroupId": Object {
-          "Fn::GetAtt": Array [
-            "DBSG9487F3EF",
-            "GroupId",
-          ],
-        },
-        "FromPort": Object {
-          "Fn::GetAtt": Array [
-            "Aurora2CBAB212",
-            "Endpoint.Port",
-          ],
-        },
-        "GroupId": Object {
-          "Fn::GetAtt": Array [
-            "DBSG9487F3EF",
-            "GroupId",
-          ],
-        },
-        "IpProtocol": "tcp",
-        "ToPort": Object {
-          "Fn::GetAtt": Array [
-            "Aurora2CBAB212",
-            "Endpoint.Port",
-          ],
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroupEgress",
-    },
-    "TargetAuroraSecret852055C73fdaad7efa858a3daf9490cf0a702aeb": Object {
+    "TargetServerlessClusterSecret5551F7763fdaad7efa858a3daf9490cf0a702aeb": Object {
       "Properties": Object {
         "Description": Object {
           "Fn::Join": Array [

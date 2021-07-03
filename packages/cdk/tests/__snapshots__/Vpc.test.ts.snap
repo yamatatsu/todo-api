@@ -17,10 +17,10 @@ Object {
         "ServiceName": "com.amazonaws.ap-northeast-1.secretsmanager",
         "SubnetIds": Array [
           Object {
-            "Ref": "VpcapplicationSubnet1Subnet8B68205B",
+            "Ref": "VpcrdsSubnet1SubnetC2926CEA",
           },
           Object {
-            "Ref": "VpcapplicationSubnet2Subnet29670962",
+            "Ref": "VpcrdsSubnet2Subnet70A835C8",
           },
         ],
         "VpcEndpointType": "Interface",
@@ -89,106 +89,6 @@ Object {
       },
       "Type": "AWS::EC2::VPC",
     },
-    "VpcapplicationSubnet1RouteTableAssociation75D5245D": Object {
-      "Properties": Object {
-        "RouteTableId": Object {
-          "Ref": "VpcapplicationSubnet1RouteTableF03E8296",
-        },
-        "SubnetId": Object {
-          "Ref": "VpcapplicationSubnet1Subnet8B68205B",
-        },
-      },
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-    },
-    "VpcapplicationSubnet1RouteTableF03E8296": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "Target/Vpc/applicationSubnet1",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::RouteTable",
-    },
-    "VpcapplicationSubnet1Subnet8B68205B": Object {
-      "Properties": Object {
-        "AvailabilityZone": "dummy1a",
-        "CidrBlock": "10.0.0.0/24",
-        "MapPublicIpOnLaunch": false,
-        "Tags": Array [
-          Object {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "application",
-          },
-          Object {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Isolated",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Target/Vpc/applicationSubnet1",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::Subnet",
-    },
-    "VpcapplicationSubnet2RouteTable17378AED": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "Target/Vpc/applicationSubnet2",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::RouteTable",
-    },
-    "VpcapplicationSubnet2RouteTableAssociationF25110CC": Object {
-      "Properties": Object {
-        "RouteTableId": Object {
-          "Ref": "VpcapplicationSubnet2RouteTable17378AED",
-        },
-        "SubnetId": Object {
-          "Ref": "VpcapplicationSubnet2Subnet29670962",
-        },
-      },
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-    },
-    "VpcapplicationSubnet2Subnet29670962": Object {
-      "Properties": Object {
-        "AvailabilityZone": "dummy1b",
-        "CidrBlock": "10.0.1.0/24",
-        "MapPublicIpOnLaunch": false,
-        "Tags": Array [
-          Object {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "application",
-          },
-          Object {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Isolated",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Target/Vpc/applicationSubnet2",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::Subnet",
-    },
     "VpcrdsSubnet1RouteTableAssociationE01668F2": Object {
       "Properties": Object {
         "RouteTableId": Object {
@@ -217,7 +117,7 @@ Object {
     "VpcrdsSubnet1SubnetC2926CEA": Object {
       "Properties": Object {
         "AvailabilityZone": "dummy1a",
-        "CidrBlock": "10.0.2.0/28",
+        "CidrBlock": "10.0.0.0/28",
         "MapPublicIpOnLaunch": false,
         "Tags": Array [
           Object {
@@ -267,7 +167,7 @@ Object {
     "VpcrdsSubnet2Subnet70A835C8": Object {
       "Properties": Object {
         "AvailabilityZone": "dummy1b",
-        "CidrBlock": "10.0.2.16/28",
+        "CidrBlock": "10.0.0.16/28",
         "MapPublicIpOnLaunch": false,
         "Tags": Array [
           Object {
