@@ -1,0 +1,6 @@
+[
+  "00-init.js",
+  "01-add_finished_to_task.js",
+  "02-add_created_at_and_updated_at_to_user.js",
+  "03-add_index_to_task.js"
+]
